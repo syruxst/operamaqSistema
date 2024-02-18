@@ -15,6 +15,10 @@ if (isset($_SESSION['usuario'])) {
 $fechaHoraActual = date('dmYHis');
 $contenidoAEncriptar = $usuario . $fechaHoraActual;
 
+$timezone = new DateTimeZone(date_default_timezone_get()); // Obtiene la zona horaria local
+$date = new DateTime('now', $timezone); // Crea una instancia de DateTime con la fecha y hora actual y la zona horaria local
+$localTime = $date->format('Y-m-d'); // Obtiene la fecha y hora local formateada
+
 $hash = md5($contenidoAEncriptar);
 
 $qr = $hash;
@@ -29,10 +33,10 @@ $resolucionValue = $accion;
 
 if ($accion === 'aprobar') {
     $estado = "APROBADO"; // Cambia esto al valor que desees
-    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', certificate = '$estado' WHERE id = '$dataInforme'";
+    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', fecha_arprob = '$localTime', certificate = '$estado' WHERE id = '$dataInforme'";
 } elseif ($accion === 'rechazar') {
     $estado = "RECHAZADO"; // Cambia esto al valor que desees
-    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', certificate = '$estado' WHERE id = '$dataInforme'";
+    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', fecha_arprob = '$localTime', certificate = '$estado' WHERE id = '$dataInforme'";
 } else {
     $response = array('status' => 'error', 'message' => 'Acción desconocida: ' . $accion);
     // Enviar la respuesta como JSON

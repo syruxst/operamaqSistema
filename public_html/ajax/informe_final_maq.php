@@ -129,132 +129,186 @@
         } else {
             console.error('El elemento con ID "btnPdf" no se encontró.');
         }
+
+        var btnRch = document.getElementById('btnRch');
+        if(btnRch){
+            btnRch.addEventListener('click', function(){
+                rechazados();
+            });
+        }else{
+            console.error('El elemento con ID "btnRch" no se encontró.');
+        }
     });
-    function enviarDatos() {
-            // Obtener el valor del input de texto
-            var dataValue = document.getElementById('data').value;
-            var textObs = document.getElementById('textObs').value
 
-            // Obtener el archivo seleccionado
-            var informeFile = document.getElementById('informe').files[0];
+    function rechazados() {
+        var dataValue = document.getElementById('data').value;
+        var textObs = document.getElementById('textObs').value;
 
-            // Validar que el campo de archivo no esté vacío
-            if (!informeFile) {
-                swal("Algo salio mal!", "Por favor seleccione el informe en pdf!", "info");
-                return;
-            }
+        if (textObs === '') {
+            document.getElementById('textObs').focus();
+            swal("Advertencia!", "Recuerda ingresar alguna observación!", "info");
+            return;
+        }
 
-            if(textObs === ''){
-                swal("Advertencia!", "Recuerda ingresa alguna observación!", "info");
-                return;
-                document.getElementById('textObs').focus();
-            }
-            // Crear un objeto FormData y agregar los datos
-            var formData = new FormData();
-            formData.append('data', dataValue);
-            formData.append('informe', informeFile);
-            formData.append('textObs', textObs);
+        var formData = new FormData();
+        formData.append('data', dataValue);
+        formData.append('textObs', textObs);
 
-            // Realizar la solicitud Ajax
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'save_infome_final_pdf.php', true);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'save_rechazo_informe.php', true);
 
-            // Manejar la respuesta
-            xhr.onload = function () {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    // La solicitud fue exitosa
-                    console.log('Respuesta:', xhr.responseText);
-                    var jsonResponse = JSON.parse(xhr.responseText);
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // La solicitud fue exitosa
+                console.log('Respuesta:', xhr.responseText);
+                var jsonResponse = JSON.parse(xhr.responseText);
 
-                    if (jsonResponse.success) {
-                        swal("Bien hecho!", jsonResponse.success, "success").then(function() {
-                            // Esperar un segundo antes de recargar la página
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000); // 1000 milisegundos = 1 segundo
-                        });
-                    } else {
-                        swal("Algo salio mal!", "jsonResponse.success", "error")
-                    }
+                if (jsonResponse.success) {
+                    swal("Bien hecho!", jsonResponse.success, "success").then(function() {
+                        // Esperar un segundo antes de recargar la página
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000); // 1000 milisegundos = 1 segundo
+                    });
                 } else {
-                    // Hubo un error en la solicitud
+                    swal("Algo salió mal!", jsonResponse.error, "error");
+                }
+            } else {
+                // Hubo un error en la solicitud
+                swal("Algo salió mal!", "Error en la solicitud al servidor", "error");
+            }
+        };
+
+        xhr.send(formData);
+    }
+
+    function enviarDatos() {
+        // Obtener el valor del input de texto
+        var dataValue = document.getElementById('data').value;
+        var textObs = document.getElementById('textObs').value
+
+        // Obtener el archivo seleccionado
+        var informeFile = document.getElementById('informe').files[0];
+
+        // Validar que el campo de archivo no esté vacío
+        if (!informeFile) {
+            swal("Algo salio mal!", "Por favor seleccione el informe en pdf!", "info");
+            return;
+        }
+
+        if(textObs === ''){
+            swal("Advertencia!", "Recuerda ingresa alguna observación!", "info");
+            return;
+            document.getElementById('textObs').focus();
+        }
+
+        // Crear un objeto FormData y agregar los datos
+        var formData = new FormData();
+        formData.append('data', dataValue);
+        formData.append('informe', informeFile);
+        formData.append('textObs', textObs);
+
+        // Realizar la solicitud Ajax
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'save_infome_final_pdf.php', true);
+
+        // Manejar la respuesta
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                // La solicitud fue exitosa
+                console.log('Respuesta:', xhr.responseText);
+                var jsonResponse = JSON.parse(xhr.responseText);
+
+                if (jsonResponse.success) {
+                    swal("Bien hecho!", jsonResponse.success, "success").then(function() {
+                        // Esperar un segundo antes de recargar la página
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000); // 1000 milisegundos = 1 segundo
+                    });
+                } else {
                     swal("Algo salio mal!", "jsonResponse.success", "error")
                 }
-            };
+            } else {
+                // Hubo un error en la solicitud
+                swal("Algo salio mal!", "jsonResponse.success", "error")
+            }
+        };
 
-            // Enviar la solicitud con el objeto FormData
-            xhr.send(formData);
+        // Enviar la solicitud con el objeto FormData
+        xhr.send(formData);
     }
+
     function enviarAccion(accion) {
-    var dataValor = document.getElementById('data').value;
+        var dataValor = document.getElementById('data').value;
 
-    if (accion === 'rechazar') {
-        swal({
-            title: "¿Estás seguro?",
-            text: "Una vez rechazado, no podrás recuperar este documento",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-        .then((willRechazar) => {
-            if (willRechazar) {
-                enviarValor(dataValor, accion);
-            } else {
-                swal("Tu documento está seguro.");
-            }
-        });
-    } else {
-        enviarValor(dataValor, accion);
-    }
-}
-
-function enviarValor(dataValor, accion) {
-    var xhr = new XMLHttpRequest();
-    var url = 'cierre_ot_M.php';
-
-    // Muestra el indicador de carga
-    var loadingOverlay = document.getElementById('loading-overlay');
-    loadingOverlay.style.display = 'block';
-
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            // Oculta el indicador de carga cuando la respuesta se recibe
-            loadingOverlay.style.display = 'none';
-
-            if (xhr.status === 200) {
-                try {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.status === 'success') {
-                        swal({
-                            title: "¡Bien hecho!",
-                            text: "Operación exitosa: " + response.message,
-                            icon: "success",
-                            button: "Aceptar",
-                        });
-                    } else {
-                        swal({
-                            title: "Algo salió mal",
-                            text: "Fallo: " + response.message + "!",
-                            icon: "error",
-                            button: "Aceptar",
-                        });
-                    }
-                } catch (e) {
-                    console.error('Error al analizar la respuesta JSON: ' + e);
+        if (accion === 'rechazar') {
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez rechazado, no podrás recuperar este documento",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willRechazar) => {
+                if (willRechazar) {
+                    enviarValor(dataValor, accion);
+                } else {
+                    swal("Tu documento está seguro.");
                 }
-            } else {
-                console.error('Error en la solicitud. Estado: ' + xhr.status);
-            }
+            });
+        } else {
+            enviarValor(dataValor, accion);
         }
-    };
+    }
 
-    var data = 'dataInforme=' + encodeURIComponent(dataValor) + '&accion=' + encodeURIComponent(accion);
+    function enviarValor(dataValor, accion) {
+        var xhr = new XMLHttpRequest();
+        var url = 'cierre_ot_M.php';
 
-    xhr.send(data);
-}
+        // Muestra el indicador de carga
+        var loadingOverlay = document.getElementById('loading-overlay');
+        loadingOverlay.style.display = 'block';
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                // Oculta el indicador de carga cuando la respuesta se recibe
+                loadingOverlay.style.display = 'none';
+
+                if (xhr.status === 200) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === 'success') {
+                            swal({
+                                title: "¡Bien hecho!",
+                                text: "Operación exitosa: " + response.message,
+                                icon: "success",
+                                button: "Aceptar",
+                            });
+                        } else {
+                            swal({
+                                title: "Algo salió mal",
+                                text: "Fallo: " + response.message + "!",
+                                icon: "error",
+                                button: "Aceptar",
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error al analizar la respuesta JSON: ' + e);
+                    }
+                } else {
+                    console.error('Error en la solicitud. Estado: ' + xhr.status);
+                }
+            }
+        };
+
+        var data = 'dataInforme=' + encodeURIComponent(dataValor) + '&accion=' + encodeURIComponent(accion);
+
+        xhr.send(data);
+    }
 
 </script>
 </head>
@@ -283,6 +337,7 @@ if ($rst) {
         $folio = $row['folio'];
         $id_ot = $row['id_ot'];
         $patente = $row['patente'];
+        $estadoRechazo = $row['informe'];
 
         ?>
         <samp>DATOS DEL EQUIPO</samp>
@@ -474,21 +529,30 @@ if ($rst) {
             </tr>        
         </table>
         <hr>
+        Observación del Inspector: <?php echo $ver['observaciones'];?> <br><hr>
+
         <?php 
             if($ver['info_final'] == ''){
+
+                $boton = ($estadoRechazo == 'RECHAZADO') ? '' : '<button type="button" class="btn btn-danger" id="btnRch" title="RECHAZAR EVIDENCIA"><i class="fa fa-times" aria-hidden="true"></i> RECHAZAR EVIDENCIA</button>';
+                
                 echo '
                     <div class="input-group">
                         <label class="input-group-text" for="inputGroupFile01">SUBIR CHECK LIST INFORME</label>
                         <input type="file" name="informe" id="informe" accept="application/pdf">
-                        <button type="button" class="btn btn-success" id="btnPdf"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> SUBIR ARCHIVO</button>
+                        <button type="button" class="btn btn-success" id="btnPdf" title="SUBIR ARCHIVO"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> SUBIR ARCHIVO</button>
+                        '.$boton.'
                     </div>
                     Observaciones: <br>
                     <textarea widht="100%" id="textObs" name="textObs"></textarea>
                 ';
-            }else { ?>
+            }else { 
+                
+                $Boton = ($estadoRechazo == 'RECHAZADO') ? '<button type="button" class="btn btn-danger" title="RECHAZAR INFORME" onclick="enviarAccion(\'rechazar\')"><i class="fa fa-times" aria-hidden="true"></i> RECHAZAR</button>' : '<button type="button" class="btn btn-success"title="APROBAR INFORME" onclick="enviarAccion(\'aprobar\')"><i class="fa fa-check" aria-hidden="true"></i> GUARDAR</button>';
+
+                ?>
                 <a class="abtn" href="informesFinalesM/<?php echo $ver['info_final']; ?>" target="_blank"><button type="button" class="btn btn-info"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Check List Terreno </button></a>&nbsp;
-                &nbsp;<button type="button" class="btn btn-success"title="APROBAR INFORME" onclick="enviarAccion('aprobar')"><i class="fa fa-check" aria-hidden="true"></i> APROBAR</button>&nbsp;
-                &nbsp;<button type="button" class="btn btn-danger" title="RECHAZAR INFORME" onclick="enviarAccion('rechazar')"><i class="fa fa-times" aria-hidden="true"></i> RECHAZAR</button>
+                &nbsp;<?php echo $Boton; ?>&nbsp;
             <?php
             }
         ?>

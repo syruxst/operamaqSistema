@@ -30,7 +30,21 @@ while($row = mysqli_fetch_array($datos)){
     $Ot = base64_encode($id_ot);
     if($row['resultado'] != ''){
 
-        $info = ($row['informe'] == '') ? '<i class="fa fa-file-text-o informe-iconM" name="idOt[]" aria-hidden="true" title="CREAR INFORME" data-id="'.$row['id'].'"></i>' : '<i class="fa fa-check fa-1x" aria-hidden="true" style="color: #3FFF33;" title="'.($row['informe'] == 'APROBADO' ? 'APROBADO' : 'REALIZADO').'"></i>';
+        //$info = ($row['informe'] == '') ? '<i class="fa fa-file-text-o informe-iconM" name="idOt[]" aria-hidden="true" title="CREAR INFORME" data-id="'.$row['id'].'"></i>' : '<i class="fa fa-check fa-1x" aria-hidden="true" style="color: #3FFF33;" title="'.($row['informe'] == 'APROBADO' ? 'APROBADO' : 'RECHAZADO').'"></i>';
+
+        switch($row['informe']){
+            case '':
+                $info = '<i class="fa fa-file-text-o informe-iconM" name="idOt[]" aria-hidden="true" title="CREAR INFORME" data-id="'.$row['id'].'"></i>';
+                break;
+            
+            case 'APROBADO':
+                $info = '<i class="fa fa-check fa-1x" aria-hidden="true" style="color: #3FFF33;"></i>';
+                break;
+
+            case 'RECHAZADO':
+                $info = '<i class="fa fa-times fa-1x" aria-hidden="true" style="color: #FF0000;"></i>';
+                break;
+        }
 
     }
 

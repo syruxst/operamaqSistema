@@ -77,6 +77,12 @@
             grid-column: 1 / span 3;
         }
     </style>
+    <script>
+        function actualizarPagina() {
+            location.reload(true);
+        }
+        setInterval(actualizarPagina, 60000);
+    </script>
 </head>
 <body>
 <div class="grid-container">

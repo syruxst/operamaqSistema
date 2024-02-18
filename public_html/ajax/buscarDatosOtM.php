@@ -177,6 +177,13 @@ while($encontrado = mysqli_fetch_array($buscar)){
                         $document = 'data-document='.$row['id'].'';
                         $infoDocument = 'infoDocument';
 
+                    }else if($row['informe'] == 'RECHAZADO'){
+
+                        $icon = 'times';
+                        $color = '#FC0404';
+                        $document = 'data-document='.$row['id'].'';
+                        $infoDocument = 'infoDocument';
+
                     }else {
 
                         $icon = 'info-circle';
@@ -194,15 +201,19 @@ while($encontrado = mysqli_fetch_array($buscar)){
                         $COLOR = '#FAD403';
                         $DATA = 'data-informe="'.$row['id'].'"';
 
-                    }else {
+                    }elseif($row['estado'] == 'APROBADO') {
 
                         $ICON = 'check';
                         $COLOR = '#3FFF33';
-                        $DATA = 'data-informe="'.$row['id'].'"';
+                        $DATA = 'data-informe="'.$row['id'].'"'; 
+
+                    }else{
+
+                        $ICON = 'times';
+                        $COLOR = '#FF0000';
+                        $DATA = 'data-informe="'.$row['id'].'"';   
 
                     }
-
-                    //$COLOR = "<i class='fa fa-$ICON fa-2x info' aria-hidden='true' style='color: $COLOR;' title='$row[estado]' ".$DATA."></i>";
 
                     if ($Perfil === 'coordinador' || $Perfil === 'administrador') {
                         $COLOR = "<i class='fa fa-$ICON fa-2x info' aria-hidden='true' style='color: $COLOR;' title='$row[estado]' ".$DATA."></i>";

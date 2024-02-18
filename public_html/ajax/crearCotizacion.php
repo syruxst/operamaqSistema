@@ -12,16 +12,9 @@
     require_once('../admin/conex.php');
 
   // Consulta para obtener la última ID de la tabla nomina
-  $sql = "SELECT MAX(id_cotiz) as max_id FROM cotiz";
-  $result = $conn->query($sql);
 
-  if ($result->num_rows > 0) {
-      $row = $result->fetch_assoc();
-      $maxId = $row["max_id"];
-      $folio = $maxId + 1;
-  } else {
-      $folio = 0;
-  }
+      //$folio = 0;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -139,10 +132,12 @@
             <span class="input-group-text" id="basic-addon1">Fecha</span>
             <input type="date" id="fecha" name="fecha" class="form-control" required>
         </div>
+        <!--
         <div class="input-group mb-1">
             <span class="input-group-text" id="basic-addon1">Cod</span>
             <input type="text" id="numberCot" name="numberCot" class="form-control" value="<?php echo $folio;?>" required>
         </div>
+        -->
     </div>
     <?php
     if (isset($_GET['tipo'])) {

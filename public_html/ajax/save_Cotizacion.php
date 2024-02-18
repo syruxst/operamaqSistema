@@ -33,38 +33,55 @@ $detalles = $_POST["detalle"];
 $valor = $_POST["valorNumerico"];
 
 // Insertar datos en la tabla cotiz
-$stmt = $conn->prepare("INSERT INTO cotiz (folio, name_cliente, faena, contacto, telefono, correo, estado, fecha_creacion, user_creacion, pago, tipo, valor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("isssssssssss", $numberCot, $empresa, $faena, $contacto, $telefono, $mail, $estado, $fecha, $user, $formaPago, $tipo, $valor);
+
+$stmt = $conn->prepare("INSERT INTO cotiz (name_cliente, faena, contacto, telefono, correo, estado, fecha_creacion, user_creacion, pago, tipo, valor) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("sssssssssss", $empresa, $faena, $contacto, $telefono, $mail, $estado, $fecha, $user, $formaPago, $tipo, $valor);
 
 if($stmt->execute()) {
-    for ($i = 0; $i < count($cantidades); $i++) {
-        $Stmt = $conn->prepare("INSERT INTO serviceCot (id_cotiz, cantidad, servicio, unitario, descuento, total, detalle, tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $Stmt->bind_param("isssssss", $numberCot, $cantidades[$i], $servicios[$i], $precios[$i], $porcentajes[$i], $totales[$i], $detalles[$i], $tipo);
-    
-        $response = array();
 
-        if($Stmt->execute()) {
+    // Obtén el ID del último registro insertado
+    $lastInsertedId = $stmt->insert_id;
 
-            enviarCotizacion($numberCot, $detalles);
-            $response = [
-                    'success' => true,
-                    'message' => 'La Cotizacion ha sido creada correctamente!'
+    // Actualiza el campo folio con el ID del último registro insertado
+    $updateStmt = mysqli_query($conn, "UPDATE `cotiz` SET folio = '$lastInsertedId' WHERE id_cotiz = '$lastInsertedId'");
+
+    // Verifica si la actualización fue exitosa
+    if($updateStmt) {
+        // Resto del código para insertar en la tabla serviceCot
+        for ($i = 0; $i < count($cantidades); $i++) {
+            $Stmt = $conn->prepare("INSERT INTO serviceCot (id_cotiz, cantidad, servicio, unitario, descuento, total, detalle, tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $Stmt->bind_param("isssssss", $lastInsertedId, $cantidades[$i], $servicios[$i], $precios[$i], $porcentajes[$i], $totales[$i], $detalles[$i], $tipo);
+        
+            $response = array();
+
+            if($Stmt->execute()) {
+            
+                enviarCotizacion($lastInsertedId, $detalles);
+                $response = [
+                        'success' => true,
+                        'message' => 'La Cotizacion ha sido creada correctamente!'
+                    ];
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Error al crear la Cotizacion: ' . $Stmt->error
                 ];
-        } else {
-            $response = [
-                'success' => false,
-                'message' => 'Error al crear la Cotizacion: ' . $Stmt->error
-            ];
+            }
         }
+    } else {
+        $response = [
+            'success' => false,
+            'message' => 'Error al actualizar el folio: ' . mysqli_error($conn)
+        ];
     }
 } else {
     $response = [
         'success' => false,
-        'message' => 'Error al crear la Cotizacion: ' . $Stmt->error
+        'message' => 'Error al crear la Cotizacion: ' . $stmt->error
     ];
 }
 
-function enviarCotizacion($numberCot, $detalles) {
+function enviarCotizacion($lastInsertedId, $detalles) {
     require_once('PHPMailer/PHPMailer.php');
     require_once('PHPMailer/SMTP.php');
     require_once('PHPMailer/Exception.php');
@@ -85,11 +102,10 @@ function enviarCotizacion($numberCot, $detalles) {
 
     // Contenido
     $mail->isHTML(true);
-    $mail->Subject = 'Se ha creado una nueva cotización N° ' . $numberCot;
-    $body = 'Por favor revisa la Cotización para su validación. <br>
-    <img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="50%">';
+    $mail->Subject = 'Se ha creado una nueva cotización N° ' . $lastInsertedId;
+    $body = 'Por favor revisa la Cotización para su validación. <br><br>Detalle:<br>';
     foreach ($detalles as $detalle) {
-        $body .= $detalle . "<br>";
+        $body .= $detalle . '<br><hr><img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="80%">';
     }
 
     $mail->Body = $body;

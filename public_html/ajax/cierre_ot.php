@@ -15,6 +15,10 @@ if (isset($_SESSION['usuario'])) {
 $fechaHoraActual = date('dmYHis');
 $contenidoAEncriptar = $usuario . $fechaHoraActual;
 
+$timezone = new DateTimeZone(date_default_timezone_get()); // Obtiene la zona horaria local
+$date = new DateTime('now', $timezone); // Crea una instancia de DateTime con la fecha y hora actual y la zona horaria local
+$localTime = $date->format('Y-m-d'); // Obtiene la fecha y hora local formateada
+
 $hash = md5($contenidoAEncriptar);
 
 $qr = $hash;
@@ -32,7 +36,7 @@ $resolucionValue = isset($_POST['resolucion']) ? $_POST['resolucion'] : null;
 
 if ($accion === 'aprobar') {
     $estado = "APROBADO"; // Cambia esto al valor que desees
-    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', brecha_s = '$brechas', brecha_p = '$obs', oport_m = '$oport', certificate = '$resolucionValue' WHERE id = '$dataInforme'";
+    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', fecha_arprob = '$localTime', brecha_s = '$brechas', brecha_p = '$obs', oport_m = '$oport', certificate = '$resolucionValue' WHERE id = '$dataInforme'";
 
     if (mysqli_query($conn, $sql)) {
         $response = array('status' => 'success', 'message' => 'Se ha aprobado la orden con éxito.');
@@ -41,7 +45,7 @@ if ($accion === 'aprobar') {
     }
 } elseif ($accion === 'rechazar') {
     $estado = "RECHAZADO"; // Cambia esto al valor que desees
-    $sql = "UPDATE detallle_ot SET estado = '$estado', brecha_s = '$brechas', brecha_p = '$obs', oport_m = '$oport', certificate = '$resolucionValue' WHERE id = '$dataInforme'";
+    $sql = "UPDATE detallle_ot SET estado = '$estado', fecha_arprob = '$localTime' , brecha_s = '$brechas', brecha_p = '$obs', oport_m = '$oport', certificate = '$resolucionValue' WHERE id = '$dataInforme'";
 
     if (mysqli_query($conn, $sql)) {
         $response = array('status' => 'success', 'message' => 'Se ha rechazado la orden con éxito.');

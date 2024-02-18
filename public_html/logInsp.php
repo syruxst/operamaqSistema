@@ -31,8 +31,19 @@
     <script src="app.js"></script>
     <script src="sw.js"></script>
     <style>
+        body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: cover;
+        align-items: center;
+        height: 100vh;
+        background: url('./img/fondos/3.jpg') no-repeat center center;
+        background-size: cover;
+        background-size: cover;
+        }
         :root {
-        --main-color: #00B9FE;
+        --main-color: #F80D0D;
         --verde: #024959;
         }
         .containe-div {

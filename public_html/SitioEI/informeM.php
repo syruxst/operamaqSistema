@@ -76,6 +76,21 @@ if (isset($_SESSION['usuario'])) {
             width: 60px;
             height: 80px;
         }
+        .file-uploadR {
+            position: relative;
+            width: 60px;
+            height: 80px;
+        }
+
+        .file-uploadR label {
+            background-color: #FF0000;
+            color: #fff;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
 
         .file-upload label {
             background-color: #3498db;
@@ -88,6 +103,10 @@ if (isset($_SESSION['usuario'])) {
         }
 
         .file-upload input {
+            display: none;
+        }
+
+        .file-uploadR input {
             display: none;
         }
 
@@ -392,6 +411,7 @@ if (isset($_SESSION['usuario'])) {
     ?>
     <script>
         function consultarPatente() {
+            document.getElementById("loading-overlay").style.display = "block";
             var patente = <?php echo json_encode($patente);?>; // Asegúrate de encerrar la patente entre comillas
 
             const url = `https://api.boostr.cl/vehicle/${patente}.json`;
@@ -409,6 +429,7 @@ if (isset($_SESSION['usuario'])) {
                 }).then(data => {
                         // Manejar la respuesta del servidor
                         cargarDatosEnTabla(data);
+                        document.getElementById("loading-overlay").style.display = "none";
                 }).catch(error => console.error('Error:', error));
         }
 
@@ -417,19 +438,18 @@ if (isset($_SESSION['usuario'])) {
             if (data.status === 'success') {
                 const vehicleData = data.data;
 
-                var inputPatente = document.getElementById('patente');
                 var inputMarca = document.getElementById('marca');
                 var inputModelo = document.getElementById('modelo');
                 var inputYear = document.getElementById('year');
                 var inputTipo = document.getElementById('tipo');
                 var inputMotor = document.getElementById('motor');
 
-                inputPatente.value = vehicleData.plate;
-                inputMarca.value = vehicleData.make;
-                inputModelo.value = vehicleData.model;
-                inputYear.value = vehicleData.year;
-                inputTipo.value = vehicleData.type;
-                inputMotor.value = vehicleData.engine;
+                // Verificar si las propiedades existen en vehicleData antes de asignar valores
+                inputMarca.value = vehicleData && vehicleData.make ? vehicleData.make : '';
+                inputModelo.value = vehicleData && vehicleData.model ? vehicleData.model : '';
+                inputYear.value = vehicleData && vehicleData.year ? vehicleData.year : '';
+                inputTipo.value = vehicleData && vehicleData.type ? vehicleData.type : '';
+                inputMotor.value = vehicleData && vehicleData.engine ? vehicleData.engine : '';
 
             } else {
                 // Manejar el error si es necesario
@@ -551,7 +571,7 @@ if (isset($_SESSION['usuario'])) {
                 <input type="hidden" name="equipo" value="<?php echo $row['equipo']; ?>">
                 <input type="hidden" name="fecha" value="<?php echo $row['fecha']; ?>">
                 <input type="hidden" name="evaluador" value="<?php echo $nombre; ?>">
-                <input type="text" name="patente" id="patente" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
+                <input type="text" name="patente" id="patente" value="<?php echo $patente; ?>" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" required>
             </td>
             <td>
                 MARCA
@@ -603,6 +623,8 @@ if (isset($_SESSION['usuario'])) {
             </td>
         </tr>
     </table>
+    <br>
+    <b style="color: red;">ANTES DE COMENZAR DEBE SELECCIONAR SI DESEA APROBAR O RECHAZAR</b>
     <hr>
     <samp>EVIDENCIA TERRENO</samp>
     <table width="100%" border="0" cellspacing="8" cellpadding="6" class="tabla">
@@ -632,27 +654,31 @@ if (isset($_SESSION['usuario'])) {
                 </div>
             </td>
             <td width="25%" align="center">
-                <div class="file-upload">
-                    <label for="placa">
-                        <i class="fa fa-upload fa-2x" aria-hidden="true" title="Subir Evidencia Informe"></i>
-                    </label>
-                    <input type="file" id="placa" name="placa" accept="image/*" onchange="displaySelectedFilePlaca(this)">
-                </div>
+                <div class="rechazoInfo" style="display: none;">
+                    <div class="file-uploadR">
+                        <label for="placa">
+                            <i class="fa fa-upload fa-2x" aria-hidden="true" title="Subir Evidencia Informe"></i>
+                        </label>
+                        <input type="file" id="placa" name="placa" accept="image/*" onchange="displaySelectedFilePlaca(this)">
+                    </div>
 
-                <div id="imagePreviewContainerPlaca" class="image-preview-containerPlaca">
-                    <img id="imagePreviewPlaca" alt="Vista previa de la imagen">
+                    <div id="imagePreviewContainerPlaca" class="image-preview-containerPlaca">
+                        <img id="imagePreviewPlaca" alt="Vista previa de la imagen">
+                    </div>
                 </div>
             </td>
             <td width="25%" align="center">
-                <div class="file-upload">
-                    <label for="sello">
-                    <i class="fa fa-upload fa-2x" aria-hidden="true" title="Subir Evidencia Informe"></i>
-                    </label>
-                    <input type="file" id="sello" name="sello" accept="image/*" onchange="displaySelectedFileSello(this)">
-                </div>
+                <div class="SelloInfo">
+                    <div class="file-upload">
+                        <label for="sello">
+                        <i class="fa fa-upload fa-2x" aria-hidden="true" title="Subir Evidencia Informe"></i>
+                        </label>
+                        <input type="file" id="sello" name="sello" accept="image/*" onchange="displaySelectedFileSello(this)">
+                    </div>
 
-                <div id="imagePreviewContainerSello" class="image-preview-containerSello">
-                    <img id="imagePreviewSello" alt="Vista previa de la imagen">
+                    <div id="imagePreviewContainerSello" class="image-preview-containerSello">
+                        <img id="imagePreviewSello" alt="Vista previa de la imagen">
+                    </div>
                 </div>
             </td>
         </tr>
@@ -785,7 +811,7 @@ if (isset($_SESSION['usuario'])) {
         </tr>
     </table>
     <hr>
-    <samp>EVIDENCIA DE SEGURIDAD</samp>
+    <samp>EVIDENCIA DE SEGURIDAD Ó RECHAZO</samp>
     <table width="100%" border="0" cellspacing="8" cellpadding="6" class="tabla">
         <tr>
             <td width="25%" align="center">
@@ -838,10 +864,10 @@ if (isset($_SESSION['usuario'])) {
             </td>
         </tr>
         <tr>
-            <td align="center">Parada Emergencia</td>
-            <td align="center">Corta Corriente</td>
-            <td align="center">Extintor</td>
-            <td align="center">Otros</td>
+            <td align="center">A</td>
+            <td align="center">B</td>
+            <td align="center">C</td>
+            <td align="center">D</td>
         </tr>
     </table>
     <hr>
@@ -1172,9 +1198,131 @@ document.addEventListener('DOMContentLoaded', function() {
     var btnAprobar = document.querySelector('[name="aprobado"]');
     var btnRechazar = document.querySelector('[name="rechazado"]');
     var form = document.getElementById('formularioInformeM');
+    var rechazoInfoDiv = document.querySelector('.rechazoInfo');
+    var rechazoInfoMostrado = false;
+    var SelloInfo = document.querySelector('.SelloInfo');
 
     btnAprobar.addEventListener('click', handleButtonClick);
-    btnRechazar.addEventListener('click', handleButtonClick);
+    btnRechazar.addEventListener('click', rechazarInforme);
+
+
+
+    function rechazarInforme(e){
+        e.preventDefault();
+        btnRechazar.addEventListener('click', function() {
+
+            if (!rechazoInfoMostrado) {
+                swal({
+                    title: "¿Estás seguro de que quieres rechazar el informe?",
+                    text: "Se mostrará la sección de rechazo si decides continuar.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willReject) => {
+                    if (willReject) {
+                        swal("Se mostrará la sección de rechazo.", {
+                            icon: "success",
+                        });
+                        rechazoInfoDiv.style.display = 'block';
+                        rechazoInfoMostrado = true;
+                        SelloInfo.style.display = "none";
+                        btnAprobar.style.display = "none";
+                    } else {
+                        swal("El informe se mantiene intacto.");
+                        rechazoInfoDiv.style.display = 'none';
+                    }
+                });
+            }else{
+
+                var horometro = document.getElementById('horometro');
+                var horometroValue = horometro.value.trim();
+                
+                if (horometroValue === '') {
+                    swal("Advertencia!", "Por favor, ingrese el Horometro del equipo antes de enviar los datos.", "info");
+                    return; 
+                    document.getElementById("loading-overlay").style.display = "none";
+                    horometro.focus();
+                }
+
+                var codigo = document.getElementById('codigo');
+                var codigoValue = codigo.value.trim();
+
+                if (codigoValue === '') {
+                    swal("Advertencia!", "Por favor, ingrese el CODIGO INTERNO  del equipo antes de enviar los datos.", "info");
+                    return; 
+                    document.getElementById("loading-overlay").style.display = "none";
+                    codigo.focus();
+                }
+
+                if (!validateFileInputsRechazado()) {
+                    return; 
+                }
+
+                var lugarInput = document.getElementById('lugar');
+                var lugarValue = lugarInput.value.trim();
+
+                if (lugarValue === '') {
+                    swal("Advertencia!", "Por favor, ingrese el lugar de inspección antes de enviar los datos.", "info");
+                    return; 
+                    document.getElementById("loading-overlay").style.display = "none";
+                    lugarInput.focus();
+                }
+
+                document.getElementById("loading-overlay").style.display = "block";
+
+                var buttonId = event.target.id;
+                var action;
+
+                if (buttonId === 'aprobado') {
+                    action = 'APROBADO';
+                    console.log(action);
+                } else if (buttonId === 'rechazado') {
+                    action = 'RECHAZADO';
+                    console.log(action);
+                }
+
+                // Crear un nuevo FormData para almacenar los datos del formulario
+                var formData = new FormData(form);
+                formData.append('action', action);
+
+                // Crear un nuevo objeto XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+
+                // Especificar el método, la URL y configurar asíncrono en true
+                xhr.open('POST', 'save_informeM.php', true);
+
+                // Configurar los controladores de eventos onload y onerror
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        // La solicitud fue exitosa
+                        console.log(xhr.responseText);
+                        // Puedes manejar la respuesta aquí
+                        if(xhr.responseText === 'info'){
+                            swal("Advertencia!", "El informe ya existe!", "info");
+                        }else if(xhr.responseText === 'success'){
+                            swal("Bien hecho!", "Los datos han sido guardado correctamente!", "success");
+                        }else if(xhr.responseText === 'error'){
+                            swal("Algo salio mal!", "No se ha podido guardar los datos!", "error");
+                        }
+                        document.getElementById("loading-overlay").style.display = "none";
+                    } else {
+                        // La solicitud falló
+                        console.error('Error:', xhr.statusText);
+                        document.getElementById("loading-overlay").style.display = "none";
+                    }
+                };
+
+                xhr.onerror = function() {
+                    console.error('Error de red');
+                    document.getElementById("loading-overlay").style.display = "none";
+                };
+
+                // Enviar el objeto FormData como cuerpo de la solicitud
+                xhr.send(formData);
+            }
+        });
+    }
 
     // Función para manejar el clic en los botones
     function handleButtonClick(event) {
@@ -1198,6 +1346,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return; 
             document.getElementById("loading-overlay").style.display = "none";
             codigo.focus();
+        }
+
+        if (!validateFileInputs()) {
+            return; 
         }
 
         var lugarInput = document.getElementById('lugar');
@@ -1262,14 +1414,49 @@ document.addEventListener('DOMContentLoaded', function() {
         // Enviar el objeto FormData como cuerpo de la solicitud
         xhr.send(formData);
     }
-
-    // Agregar el evento de clic a los botones de APROBAR y RECHAZAR
-    var btnAprobar = document.querySelector('[name="aprobado"]');
-    var btnRechazar = document.querySelector('[name="rechazado"]');
-
-    btnAprobar.addEventListener('click', handleButtonClick);
-    btnRechazar.addEventListener('click', handleButtonClick);
 });
+
+function validateFileInputs() {
+    var fileInputs = [
+        'fileInput', 'hseguridad', 'sello',
+        'revisionTecnica', 'padron', 'PCirculacion', 'Soap',
+        'Frente', 'Izquierdo', 'Derecho', 'Trasera',
+        'PEmergencia', 'Corriente', 'Extintor', 'Otros'
+    ];
+
+    for (var i = 0; i < fileInputs.length; i++) {
+        var inputId = fileInputs[i];
+        var fileInput = document.getElementById(inputId);
+
+        if (fileInput.files.length === 0) {
+            swal("Advertencia!", "Seleccione al menos un archivo para " + inputId, "info");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function validateFileInputsRechazado() {
+    var fileInputs = [
+        'fileInput', 'hseguridad', 'placa', 
+        'revisionTecnica', 'padron', 'PCirculacion', 'Soap',
+        'Frente', 'Izquierdo', 'Derecho', 'Trasera',
+        'PEmergencia', 'Corriente', 'Extintor', 'Otros'
+    ];
+
+    for (var i = 0; i < fileInputs.length; i++) {
+        var inputId = fileInputs[i];
+        var fileInput = document.getElementById(inputId);
+
+        if (fileInput.files.length === 0) {
+            swal("Advertencia!", "Seleccione al menos un archivo para " + inputId, "info");
+            return false;
+        }
+    }
+
+    return true;
+}
 
 </script>
 </html>

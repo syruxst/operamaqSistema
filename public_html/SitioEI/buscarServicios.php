@@ -229,7 +229,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <input type="checkbox" id="btn-menu" name="acepto_valor" required> Acepto el valor indicado según el periodo.
                                                 </div>
                                                 <div class="col">
-                                                    <div style="color: blue;">Nota:</div>
+                                                   
                                                 </div>
                                             </div>
                                             <div class="row"><div class="col">&nbsp;</div></div>
@@ -418,7 +418,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 <input type="checkbox" id="btn-menu" name="acepto_valor" required> Acepto el valor indicado según el periodo.
                                                             </div>
                                                             <div class="col">
-                                                                <div style="color: blue;">Nota:</div>
+                                                                
                                                             </div>
                                                         </div>
                                                         <div class="row"><div class="col">&nbsp;</div></div>
@@ -635,7 +635,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <input type="checkbox" id="btn-menu" name="acepto_valor" required> Acepto el valor indicado según el periodo.
                                                 </div>
                                                 <div class="col">
-                                                    <div style="color: blue;">Nota:</div>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="row"><div class="col">&nbsp;</div></div>
@@ -824,7 +824,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 <input type="checkbox" id="btn-menu" name="acepto_valor" required> Acepto el valor indicado según el periodo.
                                                             </div>
                                                             <div class="col">
-                                                                <div style="color: blue;">Nota:</div>
+                                                                
                                                             </div>
                                                         </div>
                                                         <div class="row"><div class="col">&nbsp;</div></div>

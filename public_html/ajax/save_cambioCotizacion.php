@@ -59,12 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $mail->setFrom('venta@operamaq.cl', 'Operamaq Empresa Spa');
                             $mail->addAddress('carla.villarroel@operamaq.cl');
                             $mail->addAddress('cristhian.baez@operamaq.cl');
-                            $mail->addAddress('daniel@ugalde.cl');
+                            $mail->addAddress('daniel.ugalde@operamaq.cl');
                         
                             // Contenido
                             $mail->isHTML(true);
                             $mail->Subject = 'Cotización Pendien de Aprobación N° '.$folio.'.';
-                            $body = 'Por favor revisa en sistema la orden de compra cliente para su revisión y aprobación. <br>';
+                            $body = 'Por favor revisa en sistema la orden de compra cliente para su revisión y aprobación. <br>
+                            <hr><img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="80%">';
                             $mail->Body = $body;
                         
                             // Enviar el correo
@@ -142,7 +143,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Contenido
                 $mail->isHTML(true);
                 $mail->Subject = 'Se ha generado Orden de Trabajo N° ' . $lastInsertedId . ' en sistema.';
-                $body = 'Por favor revisa en sistema la nueva Orden de Trabajo. <br>';
+                $body = 'Por favor revisa en sistema la nueva Orden de Trabajo. <br>
+                <hr><img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="80%">';
                 $mail->Body = $body;
             
                 // Enviar el correo

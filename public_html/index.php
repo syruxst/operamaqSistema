@@ -1,7 +1,102 @@
-<?php require('template/header.php');  require('admin/conex.php');?>
+<?php require('admin/conex.php');?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Empresa dedicada a suministrar operadores de gran experiencia  en la operación de equipos de pesados, consiguiendo maximizar su producción">
+    <meta name="keywords" content="operadores, mineria, soluciones operacionales, maquinarias">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!--icon-->
+    <link rel="apple-touch-icon" sizes="57x57" href="img/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="img/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="img/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/icons/favicon-16x16.png">
+
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="img/icons/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <title id="page-title">OPERAMAQ</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        window.addEventListener("load", function() {
+
+            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+
+                console.log("Estás usando un dispositivo móvil");
+
+            } else {
+
+                console.log("Estás usando una computadora");
+
+            }
+
+        });
+
+    </script>
+
+    <script>
+
+		let titles = ['::: Operamaq :::', '::: Soluciones Operacionales :::', '::: Operadores Expertos :::', '::: Operadores Certificados :::', '::: Operadores Calificados ::'];
+
+		let i = 0;
+
+
+
+        function animateTitle() {
+
+                    document.getElementById('page-title').innerHTML = titles[i];
+
+                    i++;
+
+                    if (i >= titles.length) {
+
+                        i = 0;
+
+                    }
+
+                }
+
+                setInterval(animateTitle, 3000);
+
+            
+
+            window.addEventListener("scroll", function(){
+
+            var header = document.querySelector("header");
+
+            header.classList.toggle("abajo",window.scrollY>0);
+
+        });
+
+	</script>
 <style>
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: cover;
+  align-items: center;
+  height: 100vh;
+  background: url('./img/fondos/1.jpg') no-repeat center center;
+  background-size: cover;
+  background-size: cover;
+}
+
         :root {
-        --main-color: #00B9FE;
+        --main-color: #F80D0D;
         --verde: #024959;
         }
         .containe-div {
@@ -15,6 +110,7 @@
         display: flex;
         border-radius: 20px 20px 20px 20px;
         box-shadow: 0 0 30px #919191ae;
+        margin: 0;
         }
         .left {
         width: 250px;
@@ -118,22 +214,22 @@
             height: auto;
             border-radius: 50%; /* Hacer la imagen redonda */
         }
-    @media (max-width: 700px) {
-        body{
-            padding: 10px;
-        }
-        .containe-div {
-            flex-direction: column; 
-            align-items: center;
-            width: 400px;
-            height: 600px;
-        }
+        @media (max-width: 700px) {
+            body{
+                padding: 10px;
+            }
+            .containe-div {
+                flex-direction: column; 
+                align-items: center;
+                width: 90%;
+                height: 600px;
+            }
 
-        .left,
-        .right {
-            max-width: 100%; /* Utiliza todo el ancho disponible */
+            .left,
+            .right {
+                max-width: 100%; /* Utiliza todo el ancho disponible */
+            }
         }
-    }
     </style>
 <body>
 <section class="tres">
@@ -163,15 +259,6 @@
             </form>
         </div>
     </div>
-
-    <div class="wave" style="height: 200px; overflow: hidden;" >
-        <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M-3.16,91.03 C197.74,213.08 349.20,-49.85 507.00,90.05 L500.00,149.60 L-0.00,149.60 Z" style="stroke: none; fill: #fff;"></path></svg>
-    </div>
 </section>
-<section class="button-icons">
-    <a href="https://www.facebook.com/OperamaqEmpresa" target="_blank" class="fa fa-facebook-official" id="facebook"></a>
-    <a href="https://api.whatsapp.com/send?phone=+56927527140&amp;text=Hola+Operamaq,+soluciones+operacionales" target="_blank" class="fa fa-whatsapp" id="whatsapp"></a>
-    <a href="https://www.instagram.com/operamaq2023/" target="_blank" class="fa fa-instagram" id="instagram"></a>
-</section>
-<?php  require('template/foot.php'); ?>
-
+</body>
+</html>
