@@ -113,9 +113,11 @@ function enviarCotizacion($lastInsertedId, $detalles) {
     // Enviar el correo
     return $mail->send();
 }
+
 $Stmt->close();
 $stmt->close();
 $conn->close();
 header('Content-Type: application/json');
 echo json_encode($response);
+mysqli_free_result($buscar_faena);
 ?>

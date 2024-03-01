@@ -118,6 +118,27 @@
         a .abtn{
             color: white;
         }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #e0e0e0;
+        }
+
+        #informe {
+            display: none;
+        }
     </style>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -537,14 +558,32 @@ if ($rst) {
                 $boton = ($estadoRechazo == 'RECHAZADO') ? '' : '<button type="button" class="btn btn-danger" id="btnRch" title="RECHAZAR EVIDENCIA"><i class="fa fa-times" aria-hidden="true"></i> RECHAZAR EVIDENCIA</button>';
                 
                 echo '
-                    <div class="input-group">
-                        <label class="input-group-text" for="inputGroupFile01">SUBIR CHECK LIST INFORME</label>
-                        <input type="file" name="informe" id="informe" accept="application/pdf">
-                        <button type="button" class="btn btn-success" id="btnPdf" title="SUBIR ARCHIVO"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> SUBIR ARCHIVO</button>
-                        '.$boton.'
-                    </div>
-                    Observaciones: <br>
-                    <textarea widht="100%" id="textObs" name="textObs"></textarea>
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <label for="informe" class="custom-file-upload">
+                                    <i class="fa fa-upload" aria-hidden="true"></i> Adjuntar Check List PDF
+                                </label>
+                                <input type="file" name="informe" id="informe" accept="application/pdf">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-success" id="btnPdf" title="SUBIR ARCHIVO"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> SUBIR ARCHIVO</button>
+                            </td>
+                            <td>
+                            '.$boton.'
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                            Observaciones:
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <textarea widht="100%" id="textObs" name="textObs"></textarea>
+                            </td>
+                        </tr>
+                    </table>
                 ';
             }else { 
                 

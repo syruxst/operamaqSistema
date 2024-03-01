@@ -98,7 +98,7 @@
                 FROM `cotiz` 
                 WHERE `estado` = 'APROBADO' 
                 AND MONTH(`fecha_creacion`) = $mesActual 
-                AND `tipo` IN ('O', 'M') 
+                AND `tipo` IN ('O', 'M', 'E') 
                 GROUP BY tipo";
 
                 $Result = mysqli_query($conn, $Sql);
@@ -108,6 +108,7 @@
                     // Inicializar las cantidades en caso de que no haya resultados para un tipo específico
                     $Cant_O = 0;
                     $Cant_M = 0;
+                    $Cant_E = 0;
                 
                     // Obtener resultados como un array asociativo
                     while ($row = mysqli_fetch_assoc($Result)) {
@@ -116,6 +117,8 @@
                             $Cant_O = $row['cantidad'];
                         } elseif ($row['tipo'] == 'M') {
                             $Cant_M = $row['cantidad'];
+                        } elseif ($row['tipo'] == 'E'){
+                            $Cant_E = $row['cantidad'];
                         }
                     }
                 }
@@ -125,7 +128,7 @@
                 FROM `cotiz` 
                 WHERE `estado` = 'PENDIENTE' 
                 AND MONTH(`fecha_creacion`) = $mesActual 
-                AND `tipo` IN ('O', 'M') 
+                AND `tipo` IN ('O', 'M', 'E') 
                 GROUP BY tipo";
 
                 $result = mysqli_query($conn, $sql);
@@ -135,6 +138,7 @@
                     // Inicializar las cantidades en caso de que no haya resultados para un tipo específico
                     $cant_O_no = 0;
                     $cant_M_no = 0;
+                    $cant_E_no = 0;
                 
                     // Obtener resultados como un array asociativo
                     while ($Row = mysqli_fetch_assoc($result)) {
@@ -143,13 +147,15 @@
                             $cant_O_no = $Row['cantidad'];
                         } elseif ($Row['tipo'] == 'M') {
                             $cant_M_no = $Row['cantidad'];
+                        } elseif ($Row['tipo'] == 'E'){
+                            $cant_E_no = $Row['cantidad'];
                         }
                     }
                 }
 
                 /****TOTAL******/
                 // Tipos de cotización
-                $tipos = ['O', 'M'];
+                $tipos = ['O', 'M', 'E'];
 
                 // Inicializar un array para almacenar las cantidades
                 $cantidades = [];
@@ -205,6 +211,13 @@
                             backgroundColor: 'rgba(255, 99, 132, 0.2)',
                             borderColor: 'rgba(255, 99, 132, 1)',
                             borderWidth: 1
+                        },
+                        {
+                            label: 'E',
+                            data: [<?php echo $Cant_E; ?>, <?php echo $cant_E_no; ?>, <?php echo $cantidades['E']; ?>],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1  
                         }
                     ]
                 };
@@ -747,6 +760,23 @@
                 }
 
                 $data_cadena_cert_clone = '[' . implode(', ', $resultados_por_mes_cert_clone) . ']';
+
+                $resultados_por_mes_eva = array();
+
+                for ($mes_clone_eva = 1; $mes_clone_eva <= 12; $mes_clone_eva++) {
+                    $query_eva_clone = "SELECT SUM(cantidad) as cant FROM `serviceCot` WHERE MONTH(fecha_creacion) = $mes_clone_eva AND YEAR(fecha_creacion) = $año AND estado ='A' AND tipo = 'E'";
+                    $eva_query_clone = mysqli_query($conn, $query_eva_clone);
+
+                    if ($eva_query_clone) {
+                        $row_eva_clone = mysqli_fetch_assoc($eva_query_clone);
+                        $resultados_por_mes_eva[$mes_clone_eva] = $row_eva_clone['cant'];
+                    } else {
+                        $resultados_por_mes_eva[$mes_clone_eva] = 0;
+                    }
+                }
+
+                $data_cadena_eva_clone = '[' . implode(', ', $resultados_por_mes_eva) . ']';
+
             ?>
             <canvas id="myChartL" style="width: 100%; height:100%;"></canvas>
 
@@ -769,6 +799,14 @@
                             borderColor: 'rgba(75, 192, 192, 1)',
                             borderWidth: 1,
                             data: <?php echo $data_cadena_cert_clone;?>, // Dos barras por mes
+                            type: 'bar', // Tipo de gráfico de barras
+                        },
+                        {
+                            label: 'Evaluaciones',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1,
+                            data: <?php echo $data_cadena_eva_clone;?>, // Dos barras por mes
                             type: 'bar', // Tipo de gráfico de barras
                         },
                         {

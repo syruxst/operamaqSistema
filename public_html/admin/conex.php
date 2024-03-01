@@ -1,8 +1,8 @@
 <?php
 
 $servername = "localhost";
-$username = "u992209295_acreditasys";
-$password = "8Oe|oUPedx!";
+$username = "root";
+$password = "";
 $dbname = "u992209295_acreditasys";
 
 // Establece la conexión con la base de datos

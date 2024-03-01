@@ -928,7 +928,7 @@ if (isset($_SESSION['usuario'])) {
                 imagePreviewContainerHds.style.display = 'block';
             };
 
-            readerHds.readAsDataURL(file);
+            readerHds.readAsDataURL(fileHds);
         }
     }
 

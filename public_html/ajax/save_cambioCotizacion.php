@@ -99,60 +99,86 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $resultTipo = mysqli_fetch_array($buscarTipo);
             $Tipo = $resultTipo['tipo'];
 
+            $kpi = mysqli_query($conn, "UPDATE `serviceCot` SET fecha_creacion = '$localTime', estado = 'A' WHERE id_cotiz = '$folio'");
+
             // REVISAR //
-            $Sql = "INSERT INTO `ot` (`id_cotiz`, `date`, `user`, `tipo`) VALUES (?, ?, ?, ?)";
-            $Stmt = $conn->prepare($Sql);
-            $Stmt->bind_param("isss", $folio, $localTime, $usuario, $Tipo);
-            $Stmt->execute();
+            $buscarExistencia = mysqli_query($conn, "SELECT id_cotiz FROM `ot` WHERE id_cotiz = '$folio'");
 
-            /////////
-            
-            // Obtener el último ID generado
-            $lastInsertedId = $conn->insert_id;
+            if (mysqli_num_rows($buscarExistencia) == 0) {
 
-            if ($stmt->execute()) {
-                echo json_encode(array("success" => true, "message" => "El archivo ha sido revisado."));
-
-                // enviar correo a usuarios 
-                // sebastian.penaloza@operamaq.cl
-                // cristhian.baez@operamaq.cl
-                // daniel.vera@operamaq.cl
-                // oficina.tecnica@operamaq.cl 0FicinaTech2023%
-                require_once('PHPMailer/PHPMailer.php');
-                require_once('PHPMailer/SMTP.php');
-                require_once('PHPMailer/Exception.php');
-            
-                $mail = new PHPMailer\PHPMailer\PHPMailer();
-                $mail->CharSet = 'UTF-8';
-                $mail->isSMTP();
-                $mail->Host = 'smtp.hostinger.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'venta@operamaq.cl';
-                $mail->Password = 'Operamaq2023#';
-                $mail->SMTPSecure = 'ssl';
-                $mail->Port = 465;
-            
-                //Destinatarios
-                $mail->setFrom('venta@operamaq.cl', 'Operamaq Empresa Spa');
-                $mail->addAddress('sebastian.penaloza@operamaq.cl');
-                $mail->addAddress('cristhian.baez@operamaq.cl');
-                $mail->addAddress('daniel.ugalde@operamaq.cl');
-                $mail->addAddress('catherine.tejeiro@operamaq.cl');
-                $mail->addAddress('yaritza.carrasco@operamaq.cl');
-            
-                // Contenido
-                $mail->isHTML(true);
-                $mail->Subject = 'Se ha generado Orden de Trabajo N° ' . $lastInsertedId . ' en sistema.';
-                $body = 'Por favor revisa en sistema la nueva Orden de Trabajo. <br>
-                <hr><img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="80%">';
-                $mail->Body = $body;
-            
-                // Enviar el correo
-                return $mail->send();
-            } else {
-                echo json_encode(array("success" => false, "message" => "Ocurrió un error al actualizar el estado."));
+                $Sql = "INSERT INTO `ot` (`id_cotiz`, `date`, `user`, `tipo`) VALUES (?, ?, ?, ?)";
+                $Stmt = $conn->prepare($Sql);
+                $Stmt->bind_param("isss", $folio, $localTime, $usuario, $Tipo);
+                $Stmt->execute();
+    
+                if ($Tipo == 'E') {
+                    $query = "UPDATE `ot` SET estado = 'CERRADO', date_cierre = ?, user_cierre = ? WHERE id_cotiz = ?";
+                    
+                    $stmt = mysqli_prepare($conn, $query);
+                    
+                    $kpi = mysqli_query($conn, "UPDATE `serviceCot` SET fecha_creacion = '$localTime', estado = 'A' WHERE id_cotiz = '$folio'");
+                    // Verificar si la preparación de la consulta fue exitosa
+                    if ($stmt) {
+                        // Asociar parámetros
+                        mysqli_stmt_bind_param($stmt, "sss", $localTime, $usuario, $folio);
+                        
+                        // Ejecutar la consulta preparada
+                        $cerrar = mysqli_stmt_execute($stmt);
+                        
+                        // Cerrar la declaración preparada
+                        mysqli_stmt_close($stmt);
+                    }
+                }
+                /////////
+                
+                // Obtener el último ID generado
+                $lastInsertedId = $conn->insert_id;
+    
+                if ($stmt->execute()) {
+                    echo json_encode(array("success" => true, "message" => "El archivo ha sido revisado."));
+    
+                    // enviar correo a usuarios 
+                    // sebastian.penaloza@operamaq.cl
+                    // cristhian.baez@operamaq.cl
+                    // daniel.vera@operamaq.cl
+                    // oficina.tecnica@operamaq.cl 0FicinaTech2023%
+                    require_once('PHPMailer/PHPMailer.php');
+                    require_once('PHPMailer/SMTP.php');
+                    require_once('PHPMailer/Exception.php');
+                
+                    $mail = new PHPMailer\PHPMailer\PHPMailer();
+                    $mail->CharSet = 'UTF-8';
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.hostinger.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'venta@operamaq.cl';
+                    $mail->Password = 'Operamaq2023#';
+                    $mail->SMTPSecure = 'ssl';
+                    $mail->Port = 465;
+                
+                    //Destinatarios
+                    $mail->setFrom('venta@operamaq.cl', 'Operamaq Empresa Spa');
+                    $mail->addAddress('sebastian.penaloza@operamaq.cl');
+                    $mail->addAddress('cristhian.baez@operamaq.cl');
+                    $mail->addAddress('daniel.ugalde@operamaq.cl');
+                    $mail->addAddress('catherine.tejeiro@operamaq.cl');
+                    $mail->addAddress('yaritza.carrasco@operamaq.cl');
+                
+                    // Contenido
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Se ha generado Orden de Trabajo N° ' . $lastInsertedId . ' en sistema.';
+                    $body = 'Por favor revisa en sistema la nueva Orden de Trabajo. <br>
+                    <hr><img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="80%">';
+                    $mail->Body = $body;
+                
+                    // Enviar el correo
+                    return $mail->send();
+                } else {
+                    echo json_encode(array("success" => false, "message" => "Ocurrió un error al actualizar el estado."));
+                }
+            }else {
+                echo json_encode(array("success" => false, "message" => "El 'id_cotiz' ya existe en la tabla 'ot'."));
             }
-
         }else{
   
             $sql = "UPDATE cotiz SET estado = ? WHERE folio = ?";

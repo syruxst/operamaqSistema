@@ -11,101 +11,112 @@
     <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
     <title>:: Ingreso Operadores ::</title>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: cover;
+            align-items: center;
+            height: 100vh;
+            background: url('../img/fondos/4.jpg') no-repeat center center;
+            background-size: cover;
+            background-size: cover;
+        }
         :root {
-        --main-color: #00B9FE;
-        --verde: #024959;
+            --main-color: #F80D0D;
+            --verde: #024959;
         }
         .containe-div {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 650px;
-        transform: translate(-50%, -50%);
-        height: 350px;
-        background-color: var(--main-color);
-        display: flex;
-        border-radius: 20px 20px 20px 20px;
-        box-shadow: 0 0 30px #919191ae;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 650px;
+            transform: translate(-50%, -50%);
+            height: 350px;
+            background-color: var(--main-color);
+            display: flex;
+            border-radius: 20px 20px 20px 20px;
+            box-shadow: 0 0 30px #919191ae;
         }
         .left {
-        width: 250px;
-        height: 100%;
-        background-color: var(--main-color);
-        border-radius: 20px 0px 0px 20px;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        color: rgb(255, 255, 255) !important;
-        padding: 20px;
-        font-weight: 600;
+            width: 250px;
+            height: 100%;
+            background-color: var(--main-color);
+            border-radius: 20px 0px 0px 20px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: rgb(255, 255, 255) !important;
+            padding: 20px;
+            font-weight: 600;
         }
         .left p {
-        position: absolute;
-        bottom: 0;
-        font-size: .7em;
+            position: absolute;
+            bottom: 0;
+            font-size: .7em;
         }
         .right {
-        width: 400px;
-        height: 100%;
-        background-color: #fff;
-        border-radius: 20px 20px 20px 20px;
-        animation: slideRight 1s forwards;
-        padding: 20px;
+            width: 400px;
+            height: 100%;
+            background-color: #fff;
+            border-radius: 20px 20px 20px 20px;
+            animation: slideRight 1s forwards;
+            padding: 20px;
         }
         .inputbox {
-        position: relative;
-        margin: 30px 0;
-        width: 100%;
-        border-bottom: 1px solid var(--main-color);
+            position: relative;
+            margin: 30px 0;
+            width: 100%;
+            border-bottom: 1px solid var(--main-color);
         }
         .inputbox label {
-        position: absolute;
-        top: 50%;
-        left: 5px;
-        transform: translateY(-50%);
-        color: var(--main-color);
-        font-size: 1em;
-        pointer-events: none;
-        transition: 0.5s;
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            color: var(--main-color);
+            font-size: 1em;
+            pointer-events: none;
+            transition: 0.5s;
         }
         .inputbox input:focus ~ label,
         input:valid ~ label {
-        top: -5px;
-        font-size: .8em;
+            top: -5px;
+            font-size: .8em;
         }
         .inputbox input {
-        width: 100%;
-        height: 50px;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        font-size: 1em;
-        padding: 0 35px 0 5px;
-        color: var(--main-color);
+            width: 100%;
+            height: 50px;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            padding: 0 35px 0 5px;
+            color: var(--main-color);
         }
         .inputbox i {
-        position: absolute;
-        right: 8px;
-        font-size: 1.2em;
-        top: 20px;
-        color: var(--main-color)
+            position: absolute;
+            right: 8px;
+            font-size: 1.2em;
+            top: 20px;
+            color: var(--main-color)
         }
         .right input[type="submit"] {
-        width: 100%;
-        height: 50px;
-        border: none;
-        outline: none;
-        background-color: var(--main-color);
-        color: #fff;
-        font-size: 1em;
-        border-radius: 25px;
-        cursor: pointer;
-        transition: 0.5s;
+            width: 100%;
+            height: 50px;
+            border: none;
+            outline: none;
+            background-color: var(--main-color);
+            color: #fff;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.5s;
         }
         .right input[type="submit"]:hover {
-        background-color: #fff;
-        color: var(--main-color);
-        border: 1px solid var(--main-color);
+            background-color: #fff;
+            color: var(--main-color);
+            border: 1px solid var(--main-color);
         }
         @keyframes slideRight {
         from {
@@ -198,9 +209,10 @@
         .containe-div {
             flex-direction: column; 
             align-items: center;
-            width: 400px;
+            width: 90%;
             height: 600px;
         }
+
         .left,
         .right {
             max-width: 100%; /* Utiliza todo el ancho disponible */

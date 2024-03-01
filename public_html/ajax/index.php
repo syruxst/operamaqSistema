@@ -70,8 +70,9 @@ if (isset($_SESSION['usuario'])) {
 <div class="menu">
         <ul>
         <?php if($perfil == 'administracion'){ ?>
-            <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
-                <li rel="home.php">ESTADO RESULTADO <i class="fa fa-line-chart" aria-hidden="true"></i></li>
+                <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
+                <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
+                <li rel="estado_resultado.php">EST. RESULTADO <i class="fa fa-line-chart" aria-hidden="true"></i></li>
                 <li>VENTAS
                     <ul class="submenu">
                         <li rel="crearEmpresa.php">CREAR EMPRESA</li>
@@ -104,6 +105,7 @@ if (isset($_SESSION['usuario'])) {
                 </li>
             <?php } if($perfil == 'calidad'){ ?> 
                 <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
+                <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
                 <li>VENTAS
                     <ul class="submenu">
                         <li rel="crearEmpresa.php">CREAR EMPRESA</li>
@@ -130,7 +132,8 @@ if (isset($_SESSION['usuario'])) {
                 </li>
             <?php } if($perfil == 'administrador'){ ?>
                 <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
-                <li rel="home.php">ESTADO RESULTADO <i class="fa fa-line-chart" aria-hidden="true"></i></li>
+                <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
+                <li rel="estado_resultado.php">EST. RESULTADO <i class="fa fa-line-chart" aria-hidden="true"></i></li>
                 <li>RENTAL OPERADORES
                     <ul class="submenu">
                         <li rel="oper.php">OPERADORES</li>
@@ -163,6 +166,8 @@ if (isset($_SESSION['usuario'])) {
                         <li rel="inn/administracion/">ADMIN. INN</li>
                         <li rel="certificado.php">CERTIFICADOS</li>
                         <li rel="estadoPago.php">EDP Evaluador</li>
+                        <li rel="kpi.php">Kpi Admin</li>
+                        <li rel="kpi_costos.php">Costos</li>
                     </ul>            
                 </li>
                 <li>SGC
@@ -173,6 +178,7 @@ if (isset($_SESSION['usuario'])) {
                 </li>
             <?php } if($perfil == 'coordinador'){ ?> 
                 <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
+                <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
                 <li>OF. TECNICA
                     <ul class="submenu">
                         <li rel="crear_ot.php">CREAR OT</li>     
@@ -191,6 +197,7 @@ if (isset($_SESSION['usuario'])) {
                 </li>
             <?php } if ($perfil == 'oftecnica'){ ?>
                 <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
+                <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
                 <li>OF. TECNICA
                     <ul class="submenu">
                         <li rel="crear_ot.php">CREAR OT</li>     
@@ -207,19 +214,9 @@ if (isset($_SESSION['usuario'])) {
                         <li rel="inn/inn.php">CALIDAD INN</li>
                     </ul>
                 </li>            
-            <!--<li>SGC
-                <ul class="submenu">
-                    <li>RESPONSABLE CENTRO</li>
-                    <li>COORDINADOR</li>
-                    <li>CALIDAD</li>
-                    <li>ADMIN. TECNICO</li>
-                    <li>ADMINISTRACION</li>
-                    <li>EVALUADOR</li>
-                    <li title="SISTEMA DE GESTION DE DOCUMENTOS">SGD</li>
-                </ul>
-            </li>-->
             <?php } if($perfil == 'venta'){?> 
                 <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
+                <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
                 <li>VENTAS
                 <ul class="submenu">
                     <li rel="crearEmpresa.php">CREAR EMPRESA</li>
