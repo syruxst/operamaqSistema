@@ -49,39 +49,13 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             padding: 20px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             color: #A6A7A7;
-            text-align: center;
         }
         h1{
             color: var(--color);
         }
         /* Estilos para la clase "tabla" */
         .tabla {
-            padding: 10px;
-            border-radius: 5px;
-        }
-        /* Estilos para la clase "row" */
-        .row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        /* Estilos para la clase "col" */
-        .col {
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 3px;
-            margin: 5px;
-            width: 50%; 
-            float: left; 
-            box-sizing: border-box;
-        }
-        .col a{
-            text-decoration: none;
-            color: var(--color);
-        }
-        .col a:hover{
-            text-decoration: none;
-            color: #03a4d3;
+            box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
         }
         /* Estilos para la clase "perfil" */
         .perfil {
@@ -158,8 +132,15 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     </style>
 </head>
 <body background="white">
-<div class="container">
-    <?php
+    <div class="container">
+        <h4>Faena : <?php echo $faena; ?></h4>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+            <input type="text" name="buscar" id="buscar" placeholder="Buscar por: faena, nombre, rut, equipo" class="form-control">
+        </div>
+        <hr>
+        <div id="resultado"></div>
+        <?php
         $consulta = "SELECT * FROM `cotiz` WHERE name_cliente = ? AND faena = ? AND estado = 'APROBADO'";
         $statement = $conn->prepare($consulta);
         $statement->bind_param("ss", $empresa, $faena);
@@ -168,15 +149,51 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
         if ($resultado->num_rows > 0) {
             while ($ver = $resultado->fetch_assoc()) {
-                echo "faena: " . $ver['faena'] . "<br>";
+                // Aquí puedes mostrar los resultados iniciales si es necesario
             }
         } else {
             echo "No se encontraron resultados.";
         }
 
         $statement->close();
-    ?>
+        ?>
+    </div>
 
-</div>    
+    <script>
+        // Función para realizar la búsqueda
+        function realizarBusqueda(valor) {
+            // Crear objeto XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+
+            // Obtener los valores de $empresa y $faena desde PHP
+            var empresa = '<?php echo $empresa; ?>';
+            var faena = '<?php echo $faena; ?>';
+
+            // Configurar la solicitud
+            xhr.open('POST', 'buscar_servicios.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            // Manejar el evento de carga
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById('resultado').innerHTML = xhr.responseText;
+                }
+            };
+
+            // Enviar la solicitud con los datos de búsqueda y las variables PHP
+            xhr.send('buscar=' + encodeURIComponent(valor) +
+                '&empresa=' + encodeURIComponent(empresa) +
+                '&faena=' + encodeURIComponent(faena));
+        }
+
+        // Realizar búsqueda inicial al cargar la página
+        realizarBusqueda('');
+
+        // Asociar la función al evento input del input de búsqueda
+        document.getElementById('buscar').addEventListener('input', function () {
+            var valorBusqueda = this.value.trim();
+            realizarBusqueda(valorBusqueda);
+        });
+    </script>
 </body>
 </html>

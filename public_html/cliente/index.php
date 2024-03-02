@@ -9,7 +9,7 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     
     if ($rst->num_rows > 0) {
         $row = $rst->fetch_assoc();
-        $name = $row['contacto'];
+        $name = $row['empresa'];
     } else {
         header("Location: ../cliente.php");
         exit();
@@ -31,22 +31,22 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
     <!--icon-->
-    <link rel="apple-touch-icon" sizes="57x57" href="../../img/icons/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="../../img/icons/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="../../img/icons/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="../../img/icons/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="../../img/icons/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="../../img/icons/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="../../img/icons/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="../../img/icons/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="../../img/icons/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="../../img/icons/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../../img/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="../../img/icons/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../img/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="../img/icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../img/icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../img/icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../img/icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../img/icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../img/icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../img/icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../img/icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="../img/icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../img/icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/icons/favicon-16x16.png">
     <link rel="manifest" href="manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="../../img/icons/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="../img/icons/ms-icon-144x144.png">
     <title>:: Plataforma de Clientes ::</title>
     <style>
         body{
@@ -134,6 +134,14 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             box-sizing: border-box;
             height: 100vh;
         }
+        .logo img{
+            position: absolute;
+            width: 180px;
+            height: 70px;
+            z-index: 1;
+            top: 20px;
+            left: 5px;
+        }
 
         @media (max-width: 666px) {
             .contenedor {
@@ -163,7 +171,7 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 </head>
 <body>
 <div class="cabecera">
-   <?php echo "Bienvenido " . $name; ?> 
+   <?php echo "Bienvenido " . $name; ?> <div class="logo"><img src="../img/LogoPrincipal.png" width="200px"></div>
    <div id="exit" title="cerrar sesión"><i class="fa fa-sign-out" aria-hidden="true"></i> cerrar sesión</div>
 </div>
 <div class="contenedor">
@@ -197,7 +205,7 @@ document.getElementById('exit').addEventListener('click', function(event) {
         })
         .then((willDelete) => {
         if (willDelete) {
-            window.location.href = "../api/logout.php";
+            window.location.href = "out.php";
             console.log("cerrar sesion");
         } else {
             swal("Tu sesión esta a salvo!");
