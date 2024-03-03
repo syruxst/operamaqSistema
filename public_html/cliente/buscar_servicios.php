@@ -38,7 +38,7 @@ if ($result->num_rows > 0) {
                 <th>Rut</th>
                 <th>Nombre</th>
                 <th>Equipo</th>
-                <th>OT</th>
+                <th title='ORDEN DE TRABAJO'>OT</th>
                 <th title='PRUEBA TERORICA'>T</th>
                 <th title='CHEQUEO DOCUMENTAL'>D</th>
                 <th title='PRUEBA PRACTICA'>P</th>
@@ -61,8 +61,16 @@ if ($result->num_rows > 0) {
 
         if ($rst->num_rows > 0) {
             $info = '<i class="fa fa-file-text-o fa-lg abrir-popup" data-informe="'.$id.'" aria-hidden="true" title="INFORME DE BRECHAS"></i>';
+            $submit = '<i class="fa fa-upload fa-lg" aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i>';
+
+            $submit = '<label for="fileInput_'. $id .'" onclick="handleFileClick('. $id .')">
+                            <i id="uploadIcon_'. $id .'" class="fa fa-upload fa-lg upload-icon" aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i>
+                        </label>';
+                  echo '<input type="file" id="fileInput_' . $id . '" name="fileInput_' . $id . '" class="file-input"">';
+
         }else {
             $info = '';
+            $submit = '';
         }
 
         echo "<tr>
@@ -70,12 +78,12 @@ if ($result->num_rows > 0) {
                 <td>" . $row['rut'] . "</td>
                 <td>" . $row['nombre'] . "</td>
                 <td>" . $row['equipo'] . "</td>
-                <td style='color: #2ECC71; cursor: pointer;'><b>" . $id . "</b></td>
+                <td style='color: #2ECC71; cursor: pointer;' title='ORDEN DE TRABAJO N° ". $id ." '><b>" . $id . "</b></td>
                 <td>" . $iconT . "</td>
                 <td>" . $iconD . "</td>
                 <td>" . $iconP . "</td>
                 <td>" . $info . "</td>
-                <td></td>
+                <td>". $submit ."</td>
                 <td></td>
                 <td></td>
                 <td></td>

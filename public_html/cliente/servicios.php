@@ -81,6 +81,13 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
         .fa-file-text-o:hover {
             transform: scale(2);
         }
+        .fa-upload {
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .fa-upload:hover {
+            transform: scale(2);
+        }
         @media (max-width: 600px) {
             body {
                 padding: 20px;
@@ -89,35 +96,19 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                 width: 100%;
             }
         }
-        /*loading*/
-        /* Estilo para el contenedor del indicador de carga */
-        .loading-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-        z-index: 1000; /* Asegura que esté en la parte superior de todos los elementos */
+        .upload-icon {
+            color: #000; /* Color predeterminado del icono */
+            cursor: pointer;
         }
 
-        /* Estilo para el indicador de carga en sí */
-        .loader {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        margin: 15% auto; /* Centra el indicador de carga verticalmente */
-        animation: spin 2s linear infinite; /* Agrega una animación de giro */
+        .upload-icon.green {
+            color: green; /* Color cuando el archivo está cargado */
         }
 
-        @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        .file-input {
+            display: none; /* Ocultar el input type file por defecto */
         }
-    </style>
+     </style>
 </head>
 <body background="white">
     <div class="container">
@@ -177,6 +168,11 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                             abrirVentanaEmergente(informeId);
                         });
                     }
+
+                    function handleFileClick(id) {
+                        var fileInput = document.getElementById('fileInput_' + id);
+                        fileInput.click();
+                    }
                 }
             };
 
@@ -209,10 +205,10 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
             // Calcular las coordenadas para centrar la ventana emergente
             var left = (screenWidth - 800) / 2;
-            var top = (screenHeight - 400) / 2;
+            var top = (screenHeight - 600) / 2;
 
             // Abrir la ventana emergente en el centro de la pantalla
-            window.open(urlVentanaEmergente, '_blank', 'width=800,height=400,left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes');
+            window.open(urlVentanaEmergente, '_blank', 'width=800,height=600,left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes');
         }
 
         // Función para encriptar el valor

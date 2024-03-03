@@ -81,15 +81,15 @@ $informeIdEncriptado = $_GET['informe'] ?? '';
 $informeId = desencriptar($informeIdEncriptado);
 
 $buscarA = mysqli_query($conn, "SELECT * FROM `detallle_ot` WHERE id='$informeId'");
-$row = mysqli_fetch_array($buscarA);
-$E = $row['equipo'];
+$row_i = mysqli_fetch_array($buscarA);
+$E = $row_i['equipo'];
 // Ahora $informeId contiene el valor desencriptado
 //echo $informeId;
 ?>
 <table width="100%"> 
     <tr>
         <td><img src="../img/LogoPrincipal.png" width="200px"></td>
-        <td align="center"><h2>INFORME GENERAL DE BRECHAS</h2></td>
+        <td align="center"><h3>INFORME GENERAL DE BRECHAS</h3></td>
         <td>&nbsp;</td>
     </tr>
     <tr>
@@ -104,7 +104,7 @@ $E = $row['equipo'];
                 $stmt = mysqli_prepare($conn, $query);
                 
                 if ($stmt) {
-                    mysqli_stmt_bind_param($stmt, "sss", $row['rut'], $row['equipo'], $row['date_out']);
+                    mysqli_stmt_bind_param($stmt, "sss", $row_i['rut'], $row_i['equipo'], $row_i['date_out']);
                     mysqli_stmt_execute($stmt);
                     $result = mysqli_stmt_get_result($stmt);
                     $p_values = array();
@@ -170,10 +170,10 @@ $E = $row['equipo'];
         </td>
     </tr>
     <tr>
-        <td colspan="3" class="color mi-clase-th" style="height: 200px; font-size: 14px;">
+        <td colspan="3" class="color mi-clase-th" style="min-height: 200px; font-size: 14px;">
             <?php
 
-                $mejora = $row['oport_m'];
+                $mejora = $row_i['oport_m'];
 
                 // Agrega un salto de línea delante de la frase específica
                 $mejora = preg_replace('/PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:/i', '<br>PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:', $mejora);
