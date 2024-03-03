@@ -50,37 +50,36 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             color: #A6A7A7;
         }
-        h1{
-            color: var(--color);
-        }
-        /* Estilos para la clase "tabla" */
         .tabla {
             box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
         }
-        /* Estilos para la clase "perfil" */
-        .perfil {
-            width: 100px; 
-            height: 100px; 
-            border-radius: 50%; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto; 
-            border: 1px solid var(--color);
+        .fa-check {
+            color: #2ECC71;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
         }
-        .perfil i {
-            color: var(--color);
+
+        .fa-check:hover {
+            transform: scale(2); 
         }
-        #actualizar {
-            width: 200px; 
-            height: 40px; 
-            background-color: var(--color);
-            color: white; 
-            border: none; 
-            cursor: pointer; 
+
+        .fa-times {
+            color: red;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
         }
-        #actualizar:hover {
-            background-color: #03a4d3; 
+
+        .fa-times:hover {
+            transform: scale(2); 
+        }
+
+        .fa-file-text-o {
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+
+        .fa-file-text-o:hover {
+            transform: scale(2);
         }
         @media (max-width: 600px) {
             body {
@@ -88,17 +87,6 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             }
             .container {
                 width: 100%;
-            }
-            .row {
-                width: 100%; 
-                display: block;
-            }
-            .col {
-                width: 100%; 
-                float: none;
-            }
-            .tabla {
-                padding: 5px;
             }
         }
         /*loading*/
@@ -136,7 +124,7 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
         <h4>Faena : <?php echo $faena; ?></h4>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
-            <input type="text" name="buscar" id="buscar" placeholder="Buscar por: faena, nombre, rut, equipo" class="form-control">
+            <input type="text" name="buscar" id="buscar" placeholder="Buscar por: OT, faena, nombre, rut, equipo" class="form-control">
         </div>
         <hr>
         <div id="resultado"></div>
@@ -177,6 +165,18 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             xhr.onload = function () {
                 if (xhr.status === 200) {
                     document.getElementById('resultado').innerHTML = xhr.responseText;
+
+                    // Agregar evento click a los elementos con la clase "abrir-popup"
+                    var elementosPopup = document.getElementsByClassName('abrir-popup');
+                    for (var i = 0; i < elementosPopup.length; i++) {
+                        elementosPopup[i].addEventListener('click', function () {
+                            // Obtener el valor del atributo data-informe
+                            var informeId = this.getAttribute('data-informe');
+
+                            // Abrir la ventana emergente y pasar el valor de data-informe
+                            abrirVentanaEmergente(informeId);
+                        });
+                    }
                 }
             };
 
@@ -194,6 +194,37 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             var valorBusqueda = this.value.trim();
             realizarBusqueda(valorBusqueda);
         });
+
+        // Función para abrir la ventana emergente
+        function abrirVentanaEmergente(informeId) {
+            // Encriptar el valor de informeId
+            var informeIdEncriptado = encriptar(informeId);
+
+            // Puedes personalizar la URL de la ventana emergente y otros parámetros según tus necesidades
+            var urlVentanaEmergente = 'detalle_de_brechas.php?informe=' + informeIdEncriptado;
+
+            // Obtener las dimensiones de la pantalla
+            var screenWidth = window.screen.width;
+            var screenHeight = window.screen.height;
+
+            // Calcular las coordenadas para centrar la ventana emergente
+            var left = (screenWidth - 800) / 2;
+            var top = (screenHeight - 400) / 2;
+
+            // Abrir la ventana emergente en el centro de la pantalla
+            window.open(urlVentanaEmergente, '_blank', 'width=800,height=400,left=' + left + ',top=' + top + ',resizable=yes,scrollbars=yes');
+        }
+
+        // Función para encriptar el valor
+        function encriptar(valor) {
+            try {
+                var textoEncriptado = btoa(valor);
+                return textoEncriptado;
+            } catch (error) {
+                console.error('Error al encriptar:', error);
+                return null;
+            }
+        }
     </script>
 </body>
 </html>
