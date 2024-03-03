@@ -1,6 +1,7 @@
 <?php require('admin/conex.php');?>
 <!DOCTYPE html>
 <html lang="es">
+    <!-- esto es una prueba-->
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
