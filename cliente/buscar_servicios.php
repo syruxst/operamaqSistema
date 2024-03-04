@@ -51,6 +51,8 @@ if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_assoc()) {
         $id = $row['id'];
+        $ruta = $row['ruta_firma'];
+        $certificate = $row['certificate'];
 
         $iconT = ($row['resultado'] != '') ? '<i class="fa fa-check fa-lg" aria-hidden="true" title="PRUEBA TEORICA REALIZADA"></i>' : '';
         $iconD = ($row['doc'] == 'SI') ? '<i class="fa fa-check fa-lg" aria-hidden="true" title="DOCUMENTACION REVISADA"></i>' : ($row['doc'] == 'NO' ? '<i class="fa fa-times fa-lg" aria-hidden="true"></i>' : '');
@@ -63,16 +65,25 @@ if ($result->num_rows > 0) {
             $info = '<i class="fa fa-file-text-o fa-lg abrir-popup" data-informe="'.$id.'" aria-hidden="true" title="INFORME DE BRECHAS"></i>';
             $submit = '<i class="fa fa-upload fa-lg" aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i>';
 
-            $submit = '<label for="fileInput_'. $id .'" onclick="handleFileClick('. $id .')">
-                            <i id="uploadIcon_'. $id .'" class="fa fa-upload fa-lg upload-icon" aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i>
-                        </label>';
-                  echo '<input type="file" id="fileInput_' . $id . '" name="fileInput_' . $id . '" class="file-input"">';
+            $submit = '<label><i class="fa fa-upload fa-lg upload-icon" data-submit aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i></label>';
+            echo '<div class="modal" id="modal" style="display: none;">
+                    <div class="modal-content">
+                        <center><span style="font-size: 20px;">SUBIR INFORME DE EVIDENCIA BRECHAS</span></center>
+                        <hr>
+                        <input type="hidden" name="datos" id="datos" value="'.$id.'">
+                        <input type="file" name="file" id="file" accept=".pdf, .doc, .docx" >
+                        <hr>
+                        <button type="button" class="btn btn-success" id="subirInformeBtn"><i class="fa fa-upload fa-lg" aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i> SUBIR INFORME</button>
+                    </div>
+            </div>';
 
         }else {
             $info = '';
             $submit = '';
         }
 
+        $imgFirma = ($ruta == '') ? '' : '<a href="'.$ruta.'" target="_blank"><i class="fa fa-file-pdf-o ruta fa-lg" aria-hidden="true" style="color: red;"></i></a>';
+        $estado = ($certificate == 'APROBADO') ? '<i class="fa fa-check fa-lg" aria-hidden="true" title="CERTIFICADO APROBADO"></i>' : ($certificate == 'RECHAZADO' ? '<i class="fa fa-times fa-lg" aria-hidden="true" title="CERTIFICADO RECHAZADO"></i>' : '');
         echo "<tr>
                 <td>" . $row['folio'] . "</td>
                 <td>" . $row['rut'] . "</td>
@@ -85,8 +96,8 @@ if ($result->num_rows > 0) {
                 <td>" . $info . "</td>
                 <td>". $submit ."</td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>" . $imgFirma . "</td>
+                <td>" . $estado . "</td>
             </tr>";
     }
 

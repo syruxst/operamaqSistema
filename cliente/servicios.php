@@ -88,6 +88,41 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
         .fa-upload:hover {
             transform: scale(2);
         }
+        .fa-floppy-o {
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .fa-floppy-o:hover {
+            transform: scale(2);
+        }
+        .fa-file-pdf-o {
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .fa-file-pdf-o:hover {
+            transform: scale(2);
+        }
+        .modal {
+            display: none; /* Oculta el modal por defecto */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+            z-index: 1;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            width: 600px;
+            margin: 0 auto;
+            margin-top: 100px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
         @media (max-width: 600px) {
             body {
                 padding: 20px;
@@ -169,10 +204,92 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                         });
                     }
 
-                    function handleFileClick(id) {
-                        var fileInput = document.getElementById('fileInput_' + id);
-                        fileInput.click();
+                    var modal = document.getElementById('modal');
+
+                    var btnSubmit = document.getElementsByClassName('upload-icon');
+                    for (var i = 0; i < btnSubmit.length; i++) {
+                        btnSubmit[i].addEventListener('click', function () {
+                            modal.style.display = "block";
+                        });
                     }
+
+                    modal.addEventListener('click', function (event) {
+                        // Verifica si el clic ocurrió dentro de modal-content
+                        var modalContent = document.querySelector('.modal-content');
+                        if (!modalContent.contains(event.target)) {
+                            // Si el clic fue fuera de modal-content, oculta el modal
+                            modal.style.display = "none";
+                        }
+                    });
+
+                        document.getElementById("subirInformeBtn").addEventListener("click", function() {
+                            // Obtener el archivo y los datos
+                            var archivoInput = document.getElementById("file");
+                            var archivo = archivoInput.files[0];
+                            var datos = document.getElementById("datos").value;
+
+                            // Validar que se haya seleccionado un archivo
+                            if (!archivo) {
+                                swal("Advertencia", "Debes seleccionar un archivo antes de continuar!", "info");
+                                console.log('Debes seleccionar un archivo antes de continuar!');
+                                return;
+                            }
+
+                            // Crear objeto FormData para enviar el archivo y datos
+                            var formData = new FormData();
+                            formData.append("file", archivo);
+                            formData.append("datos", datos);
+
+                            // Crear objeto XMLHttpRequest
+                            var xhr = new XMLHttpRequest();
+
+                            // Configurar la solicitud
+                            xhr.open("POST", "save_brechas.php", true);
+
+                            // Configurar el manejo de la respuesta
+                            xhr.onreadystatechange = function () {
+                                if (xhr.readyState == 4) {
+                                    if (xhr.status == 200) {
+                                        // Analizar la respuesta JSON
+                                        var response = JSON.parse(xhr.responseText);
+
+                                        // Manejar la respuesta del servidor según el estado
+                                        if (response.status === 'success') {
+                                            console.log("¡Archivo subido exitosamente!");
+                                            swal({
+                                                icon: 'success',
+                                                title: 'Bien hecho!',
+                                                text: '¡Archivo subido exitosamente!'
+                                            });
+                                            // Puedes realizar acciones adicionales si es necesario
+                                        } else if (response.status === 'error') {
+                                            console.error("Error: " + response.message);
+                                            swal({
+                                                icon: 'error',
+                                                title: 'Algo salio mal!',
+                                                text: response.message
+                                            });
+                                            // Puedes manejar el error de alguna manera
+                                        } else if (response.status === 'info') {
+                                            console.log("Información: " + response.message);
+                                            swal({
+                                                icon: 'info',
+                                                title: 'Advertencia!',
+                                                text: response.message
+                                            });
+                                            // Puedes manejar la información de alguna manera
+                                        }
+                                    } else {
+                                        // Manejar errores de la solicitud Ajax
+                                        console.error("Error: " + xhr.status);
+                                    }
+                                }
+                            };
+
+                            // Enviar la solicitud con el objeto FormData
+                            xhr.send(formData);
+                        });
+
                 }
             };
 
