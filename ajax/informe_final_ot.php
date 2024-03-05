@@ -180,8 +180,7 @@
     $buscar = mysqli_query($conn, "SELECT * FROM `detallle_ot` WHERE id='$data'");
     $row = mysqli_fetch_array($buscar);
     $Id_informe = $row['id'];
-    $licencia = $row['licencia'];
-    $cv = $row['cv'];
+    $Brechas = $row['info_brechas'];
     $img_1 = $row['img_1'];
     $img_2 = $row['img_2'];
     $img_3 = $row['img_3'];
@@ -202,8 +201,7 @@
 
     <div class="container">
         <input type="hidden" name="resolucion" id="resolucion" value="<?php echo $resolucion; ?>">
-        <div class="item" title="VER CURRICULUM"> <a href="https://acreditasys.tech/uploads_op/<?php echo $cv;?>" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp; &nbsp; CURRILUM  </a> </div>
-        <div class="item" title="VER LICENCIA DE CONDUCIR"><a href="https://acreditasys.tech/licencias/<?php echo $licencia;?>" target="_blank"><i class="fa fa-address-card-o" aria-hidden="true"></i> &nbsp; &nbsp; LICENCIA CONDUCIR </a> </div>
+        <div class="item" title="VER INFORME DE LEVANTAMIENTO DE BRECHAS"> <a href="https://acreditasys.tech/cliente/<?php echo $Brechas;?>" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp; &nbsp; INFORME DE BRECHAS </a> </div>
         <div class="item" title="VER PRUEBA TEORICA"><a href="https://acreditasys.tech/miSitio/ver_examen.php?data=<?php echo $row['rut'];?>&E=<?php echo $E;?>&D=<?php echo $row['date_out'];?>&P=<?php echo $row['porNota'];?>&N=<?php echo $row['punNota'];?>" target="_blank" title="PRUEBA TEORICA"><i class="fa fa-file-text" aria-hidden="true"></i> &nbsp; &nbsp; PRUEBA TEORICA </a></div>
     </div>
     <hr>
@@ -225,120 +223,12 @@
                 </button>
             </div>
         </div>
-        <div class="container-obs">
-            <center><H2>BRECHAS</H2></center>
-            <?php
-                $buscar = mysqli_query($conn, "SELECT * FROM `informes` WHERE IdOper='$Id_informe'");
-                
-                // Imprimir la tabla con observaciones en una sola fila y saltos de línea
-                echo '<table width="100%" border="0">
-                        <tr>
-                            <th>Brechas Evaluador (PRUEBA PRACTICA)</th>';
-                    
-                echo '<th>Clasificación</th>';
-                echo '
-                        </tr>';
-
-                while ($rows = mysqli_fetch_array($buscar)) {
-                    // Agregar saltos de línea antes de cada "n.-"
-                    $observaciones = preg_replace('/(\d+\.-)/', "\n$1", $rows['observaciones']);
-                    
-                    echo '<tr>
-                            <td style="white-space: pre-wrap;">' . $observaciones . '</td>';
-                    echo '
-                            <td style="white-space: pre-wrap;">
-                                <textarea class="tex" name="obs" id="obs" cols="30" rows="5"></textarea>
-                            </td>';
-                    echo '
-                    </tr>';
-                }
-                echo '<tr>
-                        <th>Brechas Sistema (PRUEBA TEORICA)</th>';
-                
-                echo '<th>Clasificación</th>';
-                echo '
-                </tr>';
-                echo '<tr>
-                        <td>';
-                $query = "SELECT * FROM examenes WHERE id_oper = ? AND equipo = ? AND date_realizada = ?";
-                $stmt = mysqli_prepare($conn, $query);
-                
-                if ($stmt) {
-                    mysqli_stmt_bind_param($stmt, "sss", $row['rut'], $row['equipo'], $row['date_out']);
-                    mysqli_stmt_execute($stmt);
-                    $result = mysqli_stmt_get_result($stmt);
-                    $p_values = array();
-                    $r_values = array();
-                
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $resultado = $row['resultado'];
-                
-                        // Almacenar las preguntas y respuestas en arrays
-                        for ($i = 1; $i <= 20; $i++) {
-                            $p_values[] = $row['p' . $i];
-                            $r_values[] = $row['r' . $i];
-                        }
-                    }
-                
-                    for ($i = 0; $i < 20; $i++) {
-                        $num_pregunta = $i + 1;
-                        $num_respuesta = $i + 1;
-                
-                        // Utilizar una consulta parametrizada para evitar inyecciones SQL
-                        $prueba_stmt = mysqli_query($conn, "SELECT * FROM `$E` WHERE `id` = '{$p_values[$i]}' ");
-                        $prueba = mysqli_fetch_array($prueba_stmt);
-                        $pregunta = $prueba['PREGUNTA'];
-                        $dato = "R" . $r_values[$i];
-                        $correcta = $prueba['id_respuesta_correcta'];
-                        $respuesta = $prueba[$dato];
-                
-                        if ($r_values[$i] != $correcta) {
-                            $color = "red";
-                            $estado = "INCORRECTA";
-                
-                            echo "<section class='pregunta'>";
-                            echo "{$num_pregunta}.- " . $pregunta . "<br><br>";
-                            echo '</section>';
-                        }
-                    }
-                }
-
-                echo '</td>                           
-                        <td style="white-space: pre-wrap;">
-                            <textarea name="brechas" id="brechas" cols="30" rows="5"></textarea>
-                        </td>';
-
-                echo '</tr>';
-                echo '<tr>';
-                echo '<th colspan="2">Oportunidad de Mejora (Cada cierre de linea debe terminar en punto.)</th>';
-                echo '</tr>';
-                echo '<tr>';
-                echo '<td colspan="2">';
-                echo '<textarea name="oport" id="oport" cols="30" rows="8">PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:' . "\n" . 'EN LO REFERENTE A:' . "\n" . 'DE ACUERDO CON: ' . "\n\n" . '
-                </textarea>';
-                echo '</td>';
-                echo '</tr>';
-                echo '<tr><td colspan="2"><button id="agregarTexto">Agregar Texto</button></td></tr>';
-                echo '</table>';
-            ?>
-
-        </div>
         <div class="loading-overlay" id="loading-overlay">
             <div class="loader"></div>
         </div>
 <script>
-document.getElementById('agregarTexto').addEventListener('click', function() {
-    var textarea = document.getElementById('oport');
-    textarea.value += 'PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:' + "\n" +
-                     'EN LO REFERENTE A:' + "\n" +
-                     'DE ACUERDO CON:' + "\n\n";
-});
-
 function enviarAccion(accion) {
     var dataInforme = document.getElementById("dataInforme").value;
-    var obsValue = document.getElementById("obs").value;
-    var brechasValue = document.getElementById("brechas").value;
-    var oportValue = document.getElementById("oport").value;
     var resolucionValue = document.getElementById("resolucion").value;
     
     if (accion === 'rechazar') {
@@ -353,18 +243,18 @@ function enviarAccion(accion) {
         .then((willRechazar) => {
             if (willRechazar) {
                 // El usuario ha confirmado el rechazo, ahora puedes enviar el valor al archivo cierre_ot.php
-                enviarValor(dataInforme, accion, obsValue, brechasValue, oportValue);
+                enviarValor(dataInforme, accion);
             } else {
                 swal("Tu documento está seguro.");
             }
         });
     } else {
         // Si la acción es aprobar, simplemente envía el valor al archivo cierre_ot.php
-        enviarValor(dataInforme, accion, obsValue, brechasValue, oportValue, resolucionValue);
+        enviarValor(dataInforme, accion, resolucionValue);
     }
 }
 
-function enviarValor(dataInforme, accion, obsValue, brechasValue, oportValue, resolucionValue) {
+function enviarValor(dataInforme, accion, resolucionValue) {
     var xhr = new XMLHttpRequest();
     var url = 'cierre_ot.php';
 
@@ -407,7 +297,7 @@ function enviarValor(dataInforme, accion, obsValue, brechasValue, oportValue, re
         }
     };
 
-    var data = 'dataInforme=' + encodeURIComponent(dataInforme) + '&accion=' + encodeURIComponent(accion) + '&obs=' + encodeURIComponent(obsValue) + '&brechas=' + encodeURIComponent(brechasValue) + '&oport=' + encodeURIComponent(oportValue) + '&resolucion=' + encodeURIComponent(resolucionValue);
+    var data = 'dataInforme=' + encodeURIComponent(dataInforme) + '&accion=' + encodeURIComponent(accion) + '&resolucion=' + encodeURIComponent(resolucionValue);
     
     xhr.send(data);
 }

@@ -29,14 +29,11 @@ require_once('../admin/conex.php');
 // Recuperar los datos enviados por JavaScript
 $dataInforme = isset($_POST['dataInforme']) ? $_POST['dataInforme'] : null;
 $accion = isset($_POST['accion']) ? $_POST['accion'] : null;
-$obs = isset($_POST['obs']) ? $_POST['obs'] : null;
-$brechas = isset($_POST['brechas']) ? $_POST['brechas'] : null;
-$oport = isset($_POST['oport']) ? $_POST['oport'] : null;
 $resolucionValue = isset($_POST['resolucion']) ? $_POST['resolucion'] : null;
 
 if ($accion === 'aprobar') {
     $estado = "APROBADO"; // Cambia esto al valor que desees
-    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', fecha_arprob = '$localTime', brecha_s = '$brechas', brecha_p = '$obs', oport_m = '$oport', certificate = '$resolucionValue' WHERE id = '$dataInforme'";
+    $sql = "UPDATE detallle_ot SET estado = '$estado', qr = '$qr', fecha_arprob = '$localTime', certificate = '$resolucionValue' , brecha = '$resolucionValue' WHERE id = '$dataInforme'";
 
     if (mysqli_query($conn, $sql)) {
         $response = array('status' => 'success', 'message' => 'Se ha aprobado la orden con éxito.');
@@ -45,7 +42,7 @@ if ($accion === 'aprobar') {
     }
 } elseif ($accion === 'rechazar') {
     $estado = "RECHAZADO"; // Cambia esto al valor que desees
-    $sql = "UPDATE detallle_ot SET estado = '$estado', fecha_arprob = '$localTime' , brecha_s = '$brechas', brecha_p = '$obs', oport_m = '$oport', certificate = '$resolucionValue' WHERE id = '$dataInforme'";
+    $sql = "UPDATE detallle_ot SET estado = '$estado', fecha_arprob = '$localTime' , certificate = '$resolucionValue', brecha = '$resolucionValue' WHERE id = '$dataInforme'";
 
     if (mysqli_query($conn, $sql)) {
         $response = array('status' => 'success', 'message' => 'Se ha rechazado la orden con éxito.');

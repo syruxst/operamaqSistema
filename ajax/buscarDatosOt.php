@@ -146,6 +146,9 @@ while($encontrado = mysqli_fetch_array($buscar)){
                 <th title="PRACTICO">
                     P
                 </th>
+                <th title="BRECHAS">
+                    BR
+                </th>
                 <th title="VALIDACIÓN COORDINADOR">
                     VB
                 </th>
@@ -184,7 +187,7 @@ while($encontrado = mysqli_fetch_array($buscar)){
                 }
                 echo '</select></td>';                   
                 echo '<td><input type="date" name="fecha[]" class="custom-input"></td>';
-                echo '<td></td><td></td><td><td></td><td></td></td><td></td>';
+                echo '<td></td><td></td><td><td></td><td></td><td></td></td><td></td>';
                 echo '</tr>';
             }
             if ($numRow > 0) {
@@ -271,6 +274,18 @@ while($encontrado = mysqli_fetch_array($buscar)){
 
                     }
 
+                    if($row['oport_m'] == '') {
+                        $brIcon = 'info-circle';
+                        $brColor = '#FAD403';
+                        $brData = 'data-brecha="'.$row['id'].'"';
+                    }else {
+                        $brIcon = 'check';
+                        $brColor = '#3FFF33';
+                        $brData = 'data-brecha="'.$row['id'].'"';
+                    }
+
+                    $BR = "<i class='fa fa-$brIcon fa-2x br' aria-hidden='true' style='color: $brColor;' ".$brData."></i>";
+
                     //$COLOR = "<i class='fa fa-$ICON fa-2x info' aria-hidden='true' style='color: $COLOR;' title='$row[estado]' ".$DATA."></i>";
 
                     if ($Perfil === 'coordinador' || $Perfil === 'administrador') {
@@ -291,6 +306,7 @@ while($encontrado = mysqli_fetch_array($buscar)){
                     echo '<td>'.$color.'</td>';
                     echo '<td>'.$docC1.'</td>';
                     echo '<td>'.$Color.'</td>';
+                    echo '<td>'.$BR.'</td>';
                     echo "<td>".$COLOR."</td>";
                     echo '<td style="font-size:10px;">'.$row['folio'].'</td>';
                     echo '<td></td>';

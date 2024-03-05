@@ -102,6 +102,13 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
         .fa-file-pdf-o:hover {
             transform: scale(2);
         }
+        .fa-info-circle {
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .fa-info-circle:hover {
+            transform: scale(2);
+        }
         .modal {
             display: none; /* Oculta el modal por defecto */
             position: fixed;

@@ -45,8 +45,8 @@ if ($result->num_rows > 0) {
                 <th title='INFORME DE BRECHAS'>BR</th>
                 <th><i class='fa fa-upload' aria-hidden='true'></i> BR</th>
                 <th>VB</th>
-                <th>CERT</th>
                 <th>STATUS</th>
+                <th>CERT</th>
             </tr>";
 
     while ($row = $result->fetch_assoc()) {
@@ -84,6 +84,18 @@ if ($result->num_rows > 0) {
 
         $imgFirma = ($ruta == '') ? '' : '<a href="'.$ruta.'" target="_blank"><i class="fa fa-file-pdf-o ruta fa-lg" aria-hidden="true" style="color: red;"></i></a>';
         $estado = ($certificate == 'APROBADO') ? '<i class="fa fa-check fa-lg" aria-hidden="true" title="CERTIFICADO APROBADO"></i>' : ($certificate == 'RECHAZADO' ? '<i class="fa fa-times fa-lg" aria-hidden="true" title="CERTIFICADO RECHAZADO"></i>' : '');
+        
+       if($row['info_brechas'] !=''){
+            $vb = '<i class="fa fa-info-circle fa-lg" style="color: #F1C40F;" aria-hidden="true" title="PENDIENTE DE APROBACIÓN"></i>';
+
+            if($row['brecha'] == 'APROBADO'){
+                $vb = '<i class="fa fa-check fa-lg" aria-hidden="true" title="APROBACIÓN OK"></i>';
+                $submit = '';
+            }elseif($row['brecha'] == 'RECHAZADO') {
+                $vb = '<i class="fa fa-times fa-lg" aria-hidden="true" title="APROBACIÓN RECHAZADA"></i>';
+            }
+        }
+
         echo "<tr>
                 <td>" . $row['folio'] . "</td>
                 <td>" . $row['rut'] . "</td>
@@ -95,9 +107,9 @@ if ($result->num_rows > 0) {
                 <td>" . $iconP . "</td>
                 <td>" . $info . "</td>
                 <td>". $submit ."</td>
-                <td></td>
-                <td>" . $imgFirma . "</td>
+                <td>" . $vb . "</td>
                 <td>" . $estado . "</td>
+                <td>" . $imgFirma . "</td>
             </tr>";
     }
 

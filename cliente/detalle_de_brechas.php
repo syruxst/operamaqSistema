@@ -228,7 +228,7 @@ $E = $row_i['equipo'];
 <hr>
 <button onclick="imprimirContenido()" class="btn btn-info"><i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
 <hr>
-<label for="">Si desea utilizar nuestro formato de brechas, puedes bajar una copia desde aquí. <a href="../Manual_Plataforma_Operador.pdf" target="_blank" title="DESCARGAR FORMULARIO DE BRECHAS"><i class="fa fa-file-word-o fa-2x" aria-hidden="true"></i></a> </label>
+<label for="" style="font-weight: bold; color: red;">Si desea utilizar nuestro formato de brechas, puedes bajar una copia desde aquí. <a href="../Manual_Plataforma_Operador.pdf" target="_blank" title="DESCARGAR FORMULARIO DE BRECHAS"><i class="fa fa-file-word-o fa-2x" aria-hidden="true"></i></a> </label>
 </body>
 <script>
     function imprimirContenido() {

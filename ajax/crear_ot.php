@@ -146,6 +146,18 @@
         padding: 50px;
         box-sizing: border-box;
     }
+    .informe_brechas{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10;
+        display: none;
+        padding: 50px;
+        box-sizing: border-box; 
+    }
     #contend-iframe {
         width: 100%;
         height: auto;
@@ -157,6 +169,10 @@
     #contend-info-maq {
         width: 100%;
         height: auto;
+    }
+    #contend-brechas {
+        width: 100%;
+        height: auto;  
     }
     .contend-info{
         background: white;
@@ -180,8 +196,20 @@
         overflow: auto;
         margin-top: 20px;
     }
-        /*loading*/
-        /* Estilo para el contenedor del indicador de carga */
+    .contend-brechas {
+        background: white;
+        margin: 10px;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        padding: 50px;
+        z-index: 11;
+        overflow: auto;
+        margin-top: 20px;
+    }
+
+    /*loading*/
+    /* Estilo para el contenedor del indicador de carga */
     .loading-overlay {
         display: none;
         position: fixed;
@@ -263,10 +291,18 @@
     </div>
 <!--fin documental-->
 
+<!--informe de brechas-->
+    <div class="informe_brechas">
+        <div class="contend-brechas">
+            <iframe src="" frameborder="1" width="100%" height="auto" id="contend-brechas"></iframe>
+        </div>
+    </div>
+<!-- fin informe de brechas -->
+
 <!--informe final Operadores-->
     <div class="informe_final">
         <div class="contend-info">
-            <iframe src="www.operamaq.cl" frameborder="1" width="100%" height="auto" id="contend-iframe"></iframe>
+            <iframe src="" frameborder="1" width="100%" height="auto" id="contend-iframe"></iframe>
         </div>
     </div>
 <!--fin informe final-->
@@ -274,7 +310,7 @@
 <!--informe final Maquinaria-->
     <div class="info_maq">
         <div class="contend-info-maq">
-            <iframe src="www.operamaq.cl" frameborder="1" width="100%" height="auto" id="contend-info-maq"></iframe>
+            <iframe src="" frameborder="1" width="100%" height="auto" id="contend-info-maq"></iframe>
         </div>
     </div>
 <!--fin informe final maquinaria-->
@@ -326,24 +362,26 @@ function buscarCotizaciones() {
 
                     // Obtiene el div con la clase 'info_maq'
                     var info_maqDiv = document.querySelector('.info_maq');
-
                     // Obtiene todos los elementos con la clase 'fa-info-circle'
                     var infoIcons = document.querySelectorAll('.info');
-
                     infoIcons.forEach(function (element) {
                         element.addEventListener('click', function (event) {
                             event.stopPropagation();
-
                             var dataInforme = element.getAttribute('data-informe');
                             info_maqDiv.style.display = 'block';
-
                             var iframe = document.getElementById("contend-info-maq");
                             iframe.src = 'informe_final_maq.php?dataInforme=' + dataInforme;
-
                             iframe.onload = function () {
                                 iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
                             };
                         });
+                    });
+
+                    // Agrega un manejador de eventos de clic al div para cerrarlo
+                    info_maqDiv.addEventListener('click', function() {
+                    // Oculta el div al hacer clic sobre él
+                        info_maqDiv.style.display = 'none';
+                        buscarCotizaciones();
                     });
 
                     // Agrega un manejador de eventos de clic al div para cerrarlo
@@ -547,6 +585,28 @@ function buscarCotizaciones() {
 
                     // Trabajar dentro de la respuesta
 
+                    var informe_brechas= document.querySelector('.informe_brechas');
+
+                    var infoIconsBrecha = document.querySelectorAll('.br');
+
+                    infoIconsBrecha.forEach(function (element) {
+                        element.addEventListener('click', function (event) {
+                            event.stopPropagation();
+                            var dataInforme = element.getAttribute('data-brecha');
+                            informe_brechas.style.display = 'block';
+                            var iframeBrecha = document.getElementById("contend-brechas");
+                            iframeBrecha.src = 'brechas_info.php?data-brecha=' + dataInforme;
+                            iframeBrecha.onload = function () {
+                                iframeBrecha.style.height = iframeBrecha.contentWindow.document.body.scrollHeight + 'px';
+                            };
+                        });
+                    });
+
+                    informe_brechas.addEventListener('click', function() {
+                        informe_brechas.style.display = 'none';
+                        buscarCotizaciones();
+                    });
+                    
                     // sector de Operadores
                     
                     // Selecciona todos los elementos con la clase "rut-input"
