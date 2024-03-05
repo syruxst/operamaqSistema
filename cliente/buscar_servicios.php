@@ -53,6 +53,7 @@ if ($result->num_rows > 0) {
         $id = $row['id'];
         $ruta = $row['ruta_firma'];
         $certificate = $row['certificate'];
+        $ot = $row['id_ot'];
 
         $iconT = ($row['resultado'] != '') ? '<i class="fa fa-check fa-lg" aria-hidden="true" title="PRUEBA TEORICA REALIZADA"></i>' : '';
         $iconD = ($row['doc'] == 'SI') ? '<i class="fa fa-check fa-lg" aria-hidden="true" title="DOCUMENTACION REVISADA"></i>' : ($row['doc'] == 'NO' ? '<i class="fa fa-times fa-lg" aria-hidden="true"></i>' : '');
@@ -70,7 +71,7 @@ if ($result->num_rows > 0) {
                     <div class="modal-content">
                         <center><span style="font-size: 20px;">SUBIR INFORME DE EVIDENCIA BRECHAS</span></center>
                         <hr>
-                        <input type="hidden" name="datos" id="datos" value="'.$id.'">
+                        <input type="hidden" name="datos" id="datos" class="datoId" value="'.$id.'">
                         <input type="file" name="file" id="file" accept=".pdf, .doc, .docx" >
                         <hr>
                         <button type="button" class="btn btn-success" id="subirInformeBtn"><i class="fa fa-upload fa-lg" aria-hidden="true" title="SUBIR EVIDENCIA DE BRECHAS"></i> SUBIR INFORME</button>
@@ -87,7 +88,10 @@ if ($result->num_rows > 0) {
         
        if($row['info_brechas'] !=''){
             $vb = '<i class="fa fa-info-circle fa-lg" style="color: #F1C40F;" aria-hidden="true" title="PENDIENTE DE APROBACIÓN"></i>';
+        }
 
+        $buscarVB = mysqli_query($conn, "SELECT * FROM `detallle_ot` WHERE id = '$id'");
+        while($restVB = mysqli_fetch_array($buscarVB)){
             if($row['brecha'] == 'APROBADO'){
                 $vb = '<i class="fa fa-check fa-lg" aria-hidden="true" title="APROBACIÓN OK"></i>';
                 $submit = '';
@@ -101,7 +105,7 @@ if ($result->num_rows > 0) {
                 <td>" . $row['rut'] . "</td>
                 <td>" . $row['nombre'] . "</td>
                 <td>" . $row['equipo'] . "</td>
-                <td style='color: #2ECC71; cursor: pointer;' title='ORDEN DE TRABAJO N° ". $id ." '><b>" . $id . "</b></td>
+                <td style='color: #2ECC71; cursor: pointer;' title='ORDEN DE TRABAJO N° ". $ot ." '><b>" . $ot . "</b></td>
                 <td>" . $iconT . "</td>
                 <td>" . $iconD . "</td>
                 <td>" . $iconP . "</td>

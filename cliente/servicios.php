@@ -231,9 +231,11 @@ if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
                         document.getElementById("subirInformeBtn").addEventListener("click", function() {
                             // Obtener el archivo y los datos
-                            var archivoInput = document.getElementById("file");
+                            // Obtener el archivo y los datos del bloque específico
+                            var modalContent = this.closest('.modal-content');
+                            var archivoInput = modalContent.querySelector("#file");
                             var archivo = archivoInput.files[0];
-                            var datos = document.getElementById("datos").value;
+                            var datos = modalContent.querySelector('.datoId').value;
 
                             // Validar que se haya seleccionado un archivo
                             if (!archivo) {

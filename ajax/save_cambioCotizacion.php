@@ -16,10 +16,16 @@ $date = new DateTime('now', $timezone);
 $localTime = $date->format('Y-m-d');
 $folio = $_POST['folios'];
 $estado = $_POST['estado'];
-//mes 
-//año
-//correlativo
 
+/* buscar datos de la cotizacion*/
+$cot = mysqli_query($conn, "SELECT * FROM `cotiz` WHERE folio = '$folio'");
+$rst_cot = mysqli_fetch_array($cot);
+$empresa = $rst_cot['name_cliente'];
+$faena = $rst_cot['faena'];
+$contacto = $rst_cot['contacto'];
+$correo = $rst_cot['correo'];
+$telefono = $rst_cot['telefono'];
+/*fin*/
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['botonPresionado']) && $_POST['botonPresionado'] === 'btnPendiente') {
@@ -90,6 +96,74 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($estado == 'APROBADO'){
             $date_aprobacion = $localTime;
+
+            // crear faena si es necesario 
+            $buscar_faena = mysqli_query($conn, "SELECT * FROM `clientes` WHERE empresa	= '$empresa' AND faena = '$faena'");
+
+            if ($buscar_faena) {
+                $num_resultados = mysqli_num_rows($buscar_faena);
+
+                if ($num_resultados > 0) {
+
+                } else {
+                    function generarNumeroAleatorio($longitud) {
+                        return rand(pow(10, $longitud-1), pow(10, $longitud)-1);
+                    }
+                    $prefijoUsuario = "user";
+                    $longitudAleatoria = 8; 
+                    $numeroAleatorio = generarNumeroAleatorio($longitudAleatoria);
+                    $nombreUsuario = $prefijoUsuario . $numeroAleatorio;
+
+                    function generarContrasena() {
+                        $longitud = 12;
+                        $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                        $longitudCaracteres = strlen($caracteres);
+                        $contra= '';
+                        for ($i = 0; $i < $longitud; $i++) {
+                            $indiceAleatorio = rand(0, $longitudCaracteres - 1);
+                            $contra .= $caracteres[$indiceAleatorio];
+                        }
+                        return $contra;
+                    }
+                    $contrasenaGenerada = generarContrasena();
+                    $contrasena = $contrasenaGenerada;
+                    $hash = password_hash($contrasena, PASSWORD_BCRYPT);
+
+                    $cargar = mysqli_query($conn, "INSERT INTO `clientes` (empresa, user, pass, faena, contacto, email, fono) VALUES ('$empresa', '$nombreUsuario', '$hash', '$faena', '$contacto', '$correo', '$telefono')");
+                
+                
+                    require_once('PHPMailer/PHPMailer.php');
+                    require_once('PHPMailer/SMTP.php');
+                    require_once('PHPMailer/Exception.php');
+                
+                    $mail = new PHPMailer\PHPMailer\PHPMailer();
+                    $mail->CharSet = 'UTF-8';
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.hostinger.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'venta@operamaq.cl';
+                    $mail->Password = 'Operamaq2023#';
+                    $mail->SMTPSecure = 'ssl';
+                    $mail->Port = 465;
+                
+                    //Destinatarios
+                    $mail->setFrom('venta@operamaq.cl', 'Operamaq Empresa Spa');
+                    $mail->addAddress($correo);
+                
+                    // Contenido
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Credenciales para Plataforma Clientes';
+                    $body = 'Estimado Sr.' . $contacto . ' . <br>
+                    Sus credenciales de acceso a la plataforma de Clientes por favor pinche aquí <a href="https://demoacredita.cl/cliente/" target="_blank" title="PLATAFORMA DE CLIENTES">OPERAMAQ CLIENTES</a> <br>
+                    Con el usuarion : ' . $nombreUsuario . ' <br>
+                    Contraseña: ' . $contrasena . '<br>
+                    <hr><img src="https://acreditasys.tech/img/FirmaDeCotizacion.png" alt="Logo Operamaq" width="80%">';
+                    $mail->Body = $body;
+                
+                    // Enviar el correo
+                    return $mail->send();
+                }
+            }
 
             $sql = "UPDATE cotiz SET estado = ?, fecha_aprobacion = ?, user_aprobacion = ? WHERE folio = ?";
             $stmt = $conn->prepare($sql);

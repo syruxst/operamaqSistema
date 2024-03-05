@@ -201,16 +201,16 @@
 
     <div class="container">
         <input type="hidden" name="resolucion" id="resolucion" value="<?php echo $resolucion; ?>">
-        <div class="item" title="VER INFORME DE LEVANTAMIENTO DE BRECHAS"> <a href="https://acreditasys.tech/cliente/<?php echo $Brechas;?>" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp; &nbsp; INFORME DE BRECHAS </a> </div>
-        <div class="item" title="VER PRUEBA TEORICA"><a href="https://acreditasys.tech/miSitio/ver_examen.php?data=<?php echo $row['rut'];?>&E=<?php echo $E;?>&D=<?php echo $row['date_out'];?>&P=<?php echo $row['porNota'];?>&N=<?php echo $row['punNota'];?>" target="_blank" title="PRUEBA TEORICA"><i class="fa fa-file-text" aria-hidden="true"></i> &nbsp; &nbsp; PRUEBA TEORICA </a></div>
+        <div class="item" title="VER INFORME DE LEVANTAMIENTO DE BRECHAS"> <a href="../cliente/<?php echo $Brechas;?>" target="_blank"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> &nbsp; &nbsp; INFORME DE BRECHAS </a> </div>
+        <div class="item" title="VER PRUEBA TEORICA"><a href="../miSitio/ver_examen.php?data=<?php echo $row['rut'];?>&E=<?php echo $E;?>&D=<?php echo $row['date_out'];?>&P=<?php echo $row['porNota'];?>&N=<?php echo $row['punNota'];?>" target="_blank" title="PRUEBA TEORICA"><i class="fa fa-file-text" aria-hidden="true"></i> &nbsp; &nbsp; PRUEBA TEORICA </a></div>
     </div>
     <hr>
         <div class="container-img">
             <div class="div-50">
                 <ul class="image-list">
-                    <li class="image-item"><a href="https://acreditasys.tech/SitioEI/evidencia/<?php echo $img_1; ?>" target="_blank"><img src="https://acreditasys.tech/SitioEI/evidencia/<?php echo $img_1; ?>" alt="Imagen 1" width="200px" height="200px"></a></li>
-                    <li class="image-item"><a href="https://acreditasys.tech/SitioEI/evidencia/<?php echo $img_2; ?>" target="_blank"><img src="https://acreditasys.tech/SitioEI/evidencia/<?php echo $img_2; ?>" alt="Imagen 2" width="200px" height="200px"></a></li>
-                    <li class="image-item"><a href="https://acreditasys.tech/SitioEI/evidencia/<?php echo $img_3; ?>" target="_blank"><img src="https://acreditasys.tech/SitioEI/evidencia/<?php echo $img_3; ?>" alt="Imagen 3" width="200px" height="200px"></a></li>
+                    <li class="image-item"><a href="../SitioEI/evidencia/<?php echo $img_1; ?>" target="_blank"><img src="../SitioEI/evidencia/<?php echo $img_1; ?>" alt="Imagen 1" width="200px" height="200px"></a></li>
+                    <li class="image-item"><a href="../SitioEI/evidencia/<?php echo $img_2; ?>" target="_blank"><img src="../SitioEI/evidencia/<?php echo $img_2; ?>" alt="Imagen 2" width="200px" height="200px"></a></li>
+                    <li class="image-item"><a href="../SitioEI/evidencia/<?php echo $img_3; ?>" target="_blank"><img src="../SitioEI/evidencia/<?php echo $img_3; ?>" alt="Imagen 3" width="200px" height="200px"></a></li>
                 </ul>
             </div>
             <div class="div-50 buttons">

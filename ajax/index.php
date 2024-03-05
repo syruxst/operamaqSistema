@@ -133,7 +133,6 @@ if (isset($_SESSION['usuario'])) {
             <?php } if($perfil == 'administrador'){ ?>
                 <li rel="home.php">HOME <i class="fa fa-home" aria-hidden="true"></i></li>
                 <li rel="data_kpi.php">KPI <i class="fa fa-bar-chart" aria-hidden="true"></i></li>
-                <li rel="estado_resultado.php">EST. RESULTADO <i class="fa fa-line-chart" aria-hidden="true"></i></li>
                 <li>RENTAL OPERADORES
                     <ul class="submenu">
                         <li rel="oper.php">OPERADORES</li>
@@ -159,6 +158,13 @@ if (isset($_SESSION['usuario'])) {
                         <li rel="resumen_ot.php">RESUMEN OT</li>   
                     </ul>
                 </li>
+                <li>FINANCIERO
+                    <ul class="submenu">
+                        <li rel="estado_resultado.php">EST. RESULTADO <i class="fa fa-line-chart" aria-hidden="true"></i></li>
+                        <li rel="kpi.php">Kpi Admin</li>
+                        <li rel="kpi_costos.php">Costos</li>
+                    </ul>
+                </li>
                 <li>ADMINISTRACION
                     <ul class="submenu">
                         <li rel="buscar_Cotizacion.php">APROBACION COT.</li>
@@ -166,8 +172,6 @@ if (isset($_SESSION['usuario'])) {
                         <li rel="inn/administracion/">ADMIN. INN</li>
                         <li rel="certificado.php">CERTIFICADOS</li>
                         <li rel="estadoPago.php">EDP Evaluador</li>
-                        <li rel="kpi.php">Kpi Admin</li>
-                        <li rel="kpi_costos.php">Costos</li>
                     </ul>            
                 </li>
                 <li>SGC
