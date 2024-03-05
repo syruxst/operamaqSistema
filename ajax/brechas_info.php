@@ -103,7 +103,7 @@
     
     $bre_prac = empty($row['brecha_p']) ? '<td style="white-space: pre-wrap;"><textarea class="tex" name="obs" id="obs" cols="30" rows="5"></textarea></td>' : '<td style="white-space: pre-wrap; min-width: 200px;">' . $row['brecha_p'] . '</td>';
     $bre_sist = empty($row['brecha_s']) ? '</td><td style="white-space: pre-wrap;"><textarea name="brechas" class="tex" style="min-height: 500px; width: 100%;" id="brechas" cols="30" rows="5"></textarea></td>': '</td><td style="white-space: pre-wrap;">' . $row['brecha_s'] . '</td>';
-    if($bre_sist != ''){
+    if($row['brecha_s'] != ''){
         $textAreaOb = $row['oport_m'];
     }else {
         $textAreaOb = '<textarea name="oport" id="oport" cols="30" rows="8">PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:' . "\n" . 'EN LO REFERENTE A:' . "\n" . 'DE ACUERDO CON: ' . "\n\n" . '</textarea>';
@@ -194,10 +194,6 @@
                 echo '</tr>';
                 echo '<tr>';
                 echo '<td colspan="2">';
-                $textAreaOb = preg_replace('/PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:/i', '<br>PARA LOGRAR LA EXCELENCIA DEBE MEJORAR SU CONOCIMIENTO DE:', $textAreaOb);
-
-                $textAreaOb = preg_replace('/\.(?=\s|$)/', ".<br>", $textAreaOb);
-                
                 echo $textAreaOb;
                 echo '</td>';
                 echo '</tr>';
